@@ -1,0 +1,26 @@
+= render "partials/index_header"
+%table#dynamic-table.table.table-striped.table-bordered.table-hover
+  %thead
+    %tr        
+      %th.center
+        %label.pos-rel
+          %input.ace{:type => "checkbox"}
+          %span.lbl
+      -@columns.each do |col|
+        - if col == "updated_at" or col == "created_at"
+          %th 
+            %i.ace-icon.fa.fa-clock-o.bigger-110.hidden-480
+            = I18n.t "attributes.#{col}"
+        -else
+          %th 
+            = I18n.t "attributes.#{col}" 
+      %th 操作
+
+= render "partials/table"
+
+- if @opts[:hide_delete] == true
+  :javascript
+    $('#dynamic-table').on( 'draw.dt', function () {   
+      $('a.red').hide();
+      $('span.red').hide();
+    });

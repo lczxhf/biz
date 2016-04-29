@@ -1,0 +1,18 @@
+%li.dd-item{"data-id" => "#{item.id}"}
+  .dd-handle 
+    = item.name
+    
+    .pull-right.action-buttons
+      %a.blue{href:"#{ace_path item}"}                                    
+        %i.ace-icon.fa.fa-eye.bigger-130
+      %a.green{href:"#{ace_path_new}?parent=#{ item.id }"}
+        %i.ace-icon.fa.fa-plus-square-o.bigger-130
+
+      %a.red.delete{href:"javascript:void(0);"}
+        %i.ace-icon.fa.fa-trash.bigger-130  
+
+  %ol.dd-list    
+    -item.children.each do |child|
+      = render partial:"/admin/category/cat", locals: {item:child}
+
+    

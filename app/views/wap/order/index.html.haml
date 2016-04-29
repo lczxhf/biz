@@ -1,0 +1,113 @@
+
+%dl.dldt
+  %dt
+    %strong.w20
+      %a.all.hover{:href => "?t=all"} 全部
+    %strong.w20
+      %a.pay{:href => "?t=pay"} 待付款
+    %strong.w20
+      %a.express{:href => "?t=express"} 待发货
+    %strong.w20
+      %a.confirm{:href => "?t=confirm"} 待收货
+    %strong.w20
+      %a.comment{:href => "?t=comment"} 待评价
+  %dd
+    .swiper-container
+      .swiper-wrapper
+        #waterfall-content.swiper-slide
+          .list_d
+            %ul#container.waterfall-container{:style => "position: relative;"}
+            #waterfall-loading{:style => "display: none;"}
+              %div{:style => "text-align:center;padding:10px 0; color:#999;"} loading...
+            #waterfall-message{:style => "text-align:center;color:#999;"}
+        #waterfall-empty.swiper-slide
+          .none
+            %img{src:"/assets/images/bg_3.png"}
+            %p 您还没有相关的订单
+
+
+:javascript
+  $('#container').waterfall({
+    dataType: 'json',
+    path: "/api/order",
+    params: {
+      t: "#{flash[:t]}"
+    },
+    callbacks: {
+      loadingFinished: function($loading, isBeyondMaxPage, data) {
+        if (!isBeyondMaxPage) {
+          $loading.fadeOut();
+        } else {
+          $loading.hide();
+          $('#meiyou').show();
+        }
+        var _html = '',
+          order_txt = '待付款';
+        
+        if (data.list.length == 0 && $('#container').html().length == 0) {
+          $("#waterfall-content").hide();
+          $("#waterfall-empty").show();
+          return false;
+        }
+        
+        if (data.list == undefined){
+          $loading.hide();
+          return false;
+        }
+
+        data.list.forEach( function (item){
+          
+
+          if (item.state == 99) {
+            _html += '<li><strong><span class="org">已取消</span><img src="/assets/images/ico_17.png" />订单号：' + item.order_sn + '</strong>';
+          } else {
+            _html += '<li><strong><span class="org">' + item.state_name + '</span><img src="/assets/images/ico_17.png" />订单号：' + item.sn + '</strong>';
+          }
+          _html += '';
+          if (item.products) {
+            _html += '<em>';
+
+            item.products.forEach (function(product){
+              _html += '<a href="/wap/product/' + product.product_id + '"><img src="' + product.photo + '" /></a>';
+
+            });
+       
+            _html += '</em>';
+          }
+          _html += '<p><font>共 ' + item.products.length + ' 件商品</font><font>实付:<b class="org">￥' + item.cash_amount + '</b></font></p><p>';
+
+
+          if (item.state == 0) {
+            _html += '<a href="javascript:;" onclick="_cancel(\'' + item._id + '\');">取消订单</a>';
+          }
+
+          if (item.state == 0) {
+            _html += '<a href="/wap/order/' + item._id + '/pay">立即付款</a>';
+          }
+          if (item.shipping_state == 1 && item.state == 2) {
+            _html += '<a href="/wap/express/' + item.express_sn  + '?order=' + item._id + '" >查看物流</a>';
+          }
+          if (item.pay_state == 1 && item.shipping_state == 1) {
+            _html += '<a href="javascript:;" onclick="_confirm(\'' + item._id + '\')">确认收货</a>';
+          }
+          if (item.state == 4) {
+            _html += '<a href="?m=user&c=order&a=comment&order_sn=' + item._id + '">评价晒单</a>';
+          }
+          if (item.state == 4 && item.comment_state == 1) {
+            _html += '<a href="/wap/order/' + item._id + '">再次购买</a>';
+          }
+          _html += '<a href="/wap/order/' + item._id + '">查看订单</a>';
+          _html += '</p></li>';
+
+        })
+
+        $('#container').append(_html);
+      }
+    }
+  });
+
+- if flash[:t]
+  :javascript
+    $('strong a').removeClass('hover');  
+    $("a.#{flash[:t]}").addClass('hover');
+

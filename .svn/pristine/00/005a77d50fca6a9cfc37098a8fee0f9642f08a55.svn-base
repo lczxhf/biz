@@ -1,0 +1,29 @@
+.xiu
+  %ul
+    %li
+      %input.input_3{:name => "mobile", :type => "text", :value => "#{@current_user.mob}"}
+      %p 请输入您的新手机号码
+    %li
+      %input.btnBlue{:onclick => "update_phone();", :type => "button", :value => "保存手机号"}
+
+:javascript
+  function update_phone(){
+
+    if (checkMobile ($("input[name='mobile']").val()) == false){
+      hd_alert("手机号码不正确");
+      return;
+    }
+
+    $.ajax({
+      url:  "/api/user/#{@current_user.id}",
+      type: 'put',
+      success: function(data){
+        hd_alert("保存成功");
+        location.href = '/wap/user_profile';
+      },
+      error: function(data){
+        hd_alert(data.error_message);
+      },
+      data:{ mob: $("input[name='mobile']").val()}
+    });
+  }

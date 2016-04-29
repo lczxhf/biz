@@ -1,0 +1,2 @@
+module Amdin::ValidateCodeHelper
+end

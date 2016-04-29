@@ -1,0 +1,30 @@
+
+- main_name = I18n.t("models.#{controller_name}", default: controller_name)
+.page-header
+  %h1
+    = main_name + "管理"
+    %small
+      %i.ace-icon.fa.fa-angle-double-right      
+      =  main_name +'列表'
+
+    - if @opts[:hide_new] == false
+      %small.col-9.pull-right.toolbar-new
+        %a{href:"#{ace_path_new}"}
+          %span.blue
+            %i.ace-icon.fa.fa-plus-square-o 
+              新建
+
+- unless @opts[:hide_batch_action]
+  .btn-group.batch_action
+    %button.btn.dropdown-toggle{"data-toggle" => "dropdown"}
+      批处理
+      %span.ace-icon.fa.fa-caret-down.icon-on-right
+
+    %ul.dropdown-menu.dropdown-default
+      %li
+        %a.batch_delete{href:"#"}删除选中
+
+
+%div
+  .clearfix
+    .pull-right.tableTools-container

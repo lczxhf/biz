@@ -1,0 +1,44 @@
+.pic.clearfix
+  %em
+    %img{:src => "#{@product.get_photos.first.url_for(:thumb)}"}
+  %p
+    %a{:href => ""}=@product.name
+
+%form.textForm#appointment
+  %input#YYNo{:name => "car_no", :placeholder => "车牌号", :type => "text"}  
+  %select#sales_man{:name => "sales_man_id", :placeholder => "客户经理"}
+    %option{:value => "0"} 请选择客户经理
+    - SalesMan.all.each do |ss|
+      %option{:value => "#{ss.id}"}= ss.name
+
+  %input.name{:name => "name", :placeholder => "预约人姓名", :type => "text", value:"#{@current_user.name if @current_user}"}
+  %input.mobile{:name => "mobile", :placeholder => "预约人电话", :type => "text", value: "#{@current_user.mob if @current_user}"}
+  %input.time{:name => "time", :onclick => "WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'});", :placeholder => "预约时间", :type => "text"}
+  %input.hide{:name => 'product_id', value: "#{@product.id}"}
+  %input.hide{:name => 'user_id', value: "#{@current_user.id }"}
+  %textarea.remark{:name => "remark", :placeholder => "备注"}
+.mar15
+  %input#dosubmit.btnBlue{:type => "button", :value => "预约服务"}
+
+%script{:src => "/libs/My97DatePicker/WdatePicker.js"}
+/ %link{:href => "/assets/css/ace.min.css", :rel => "stylesheet"}    
+
+:javascript  
+  $('#dosubmit').bind('click', function() {
+    
+    if ($("input.mobile") == "") {
+      alert("请输入联系电话");
+      return;
+    }
+
+    $.post( "/wap/appointment", $("#appointment").serialize(),
+
+      function(data){
+        console.log (data);
+        hd_alert("预约成功");
+
+
+        location.href = "/wap/product/#{@product.id}";
+      });
+
+  });

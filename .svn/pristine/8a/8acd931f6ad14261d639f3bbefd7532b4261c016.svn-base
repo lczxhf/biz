@@ -1,0 +1,16 @@
+class Article
+  include  BaseModel
+  include Mongoid::Search
+
+  field :name, type: String
+  field :brief, type: String  
+  field :position, type: Integer # 排序
+
+  field :content
+
+  has_one :picture
+
+  field :state, type: Integer, default: 0
+  field_display :state, {0 => '待审核', 1 => '上线', 2 => '下线'}
+
+end

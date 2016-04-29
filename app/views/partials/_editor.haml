@@ -1,0 +1,22 @@
+#ace-editor.wysiwyg-editor
+  = @item.content.html_safe if @item.content
+
+=simple_form_for( @item, url: @action_url, method:"patch", html:{id:"submitForm"}) do |f| 
+  %input#content{:name => "#{@item.class.to_s.underscore}[content]", :type => "hidden"}
+  %br 
+  = f.button :button, id:"button-submit" do 
+    %i.ace-icon.fa.fa-check.bigger-110
+      提交
+
+%script{src:"/assets/js/jquery.hotkeys.min.js"} 
+%script{src:"/assets/js/bootstrap-wysiwyg.min.js"}
+%script{src:"/assets/js/bootbox.min.js"}
+
+= javascript_include_tag "rich_editor"
+
+:javascript
+  $("#button-submit").click(function(e){
+    e.preventDefault();
+    $("#content").val($('#ace-editor').cleanHtml(true));
+    $('#submitForm').submit();
+  })

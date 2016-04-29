@@ -1,0 +1,33 @@
+%ul.did
+  %li
+    订单编号：
+    %span.org= @order.sn
+%ul.did
+  %li
+    应付金额：
+    %span.org="￥#{@order.cash_amount}"
+  %li 支付方式：在线支付
+%ul.navD.clearfix.hide
+  %li
+    %a{:href => ""}
+      %img{:src => "/assets/images/ico_28.png"}>/
+      查看订单
+  %li
+    %a{:href => ""}
+      %img{:src => "/assets/images/ico_14_0.png"}>/
+      会员中心
+  %li
+    %a{:href => ""}
+      %img{:src => "/assets/images/ico_11_0.png"}>/
+      逛逛首页
+%ul#pays.fuku
+  %li{:pay_code => ""}
+    %em.hover
+      %img{:src => "/assets/images/small_ws_wap.png"}
+    .zhifu2
+      %p
+        %strong 支付宝手机支付
+        %font.item-name 支付宝
+.mar15
+  %a{href:"/api/order/#{@order.id.to_s}/webpay"}
+    %input.btnBlue#webpay{:name => "dosubmit", :type => "button", :value => "确认支付"}

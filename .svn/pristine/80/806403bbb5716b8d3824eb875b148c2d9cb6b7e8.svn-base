@@ -1,0 +1,36 @@
+= render '/partials/edit_header'
+
+.tabbable
+  %ul#myTab4.nav.nav-tabs.padding-12.tab-color-blue.background-blue
+    %li.active
+      %a{:href => "?r=basic"} 基本信息
+
+  .tab-content
+    #basic.tab-pane.in.active
+      =simple_form_for( @item, url:"#{ace_path @item}", method:"put", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form", :role => "form", id:"product-form"}) do |f| 
+        
+        = f.input:name
+        = f.input:post_first_fee,  as: :float
+        = f.input:post_append_fee, as: :float
+
+        = f.input:express_first_fee,  as: :float
+        = f.input:express_append_fee, as: :float
+
+        - items = ChinaCity.where(code:/\d{2}0000/)
+        - default_region = %w{广东, 广西, 安徽省, 福建,江苏省, 浙江省, 上海市}
+
+        .form-group
+          = f.label "区域", :class =>"control-label col-sm-3 no-padding-right"
+          .col-sm-5.col-xs-12
+            %select.chosen-select.tag-input-style.col-xs-12{"data-placeholder" => "选择省/市", :multiple => "multiple", name:"shipping_rule[china_city_ids][]", form:"product-form"}
+              - items.each do |item|      
+                -if (@item.china_cities.include? item)
+                  %option{:value => "#{item.id}", :selected => "true"} 
+                    = item.name
+                -else
+                  %option{:value => "#{item.id}", :selected => "true"} 
+                    = item.name   
+
+        = render '/partials/submit', f:f    
+
+= javascript_include_tag 'ace_chosen'                

@@ -1,0 +1,67 @@
+# Be sure to restart your server when you modify this file.
+
+# Version of your assets, change this if you want to expire all your assets.
+Rails.application.config.assets.version = '1.0'
+
+# Add additional assets to the asset load path
+# Rails.application.config.assets.paths << Emoji.images_path
+
+# Precompile additional assets.
+# application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
+# Rails.application.config.assets.precompile += %w( search.js )
+# Add client/assets/ folders to asset pipeline's search path.
+# If you do not want to move existing images and fonts from your Rails app
+# you could also consider creating symlinks there that point to the original
+# rails directories. In that case, you would not add these paths here.
+Rails.application.config.assets.precompile += %w( ckeditor/* )
+Rails.application.config.assets.precompile += %w( form.js )
+Rails.application.config.assets.precompile += %w( form_uploader.js )
+Rails.application.config.assets.precompile += %w( normal.css )
+Rails.application.config.assets.precompile += %w( ui-dialog.css )
+Rails.application.config.assets.precompile += %w( ui-dialog.js )
+Rails.application.config.assets.precompile += %w( cat_select.js )
+
+Rails.application.config.assets.precompile += %w( address_select.js )
+Rails.application.config.assets.precompile += %w( bmap.js)
+
+Rails.application.config.assets.precompile += %w( jquery.autocomplete.js)
+Rails.application.config.assets.precompile += %w( jquery.print.js)
+Rails.application.config.assets.precompile += %w( mydropzone.js  ace_chosen.js)
+Rails.application.config.assets.precompile += %w( rich_editor.js )
+
+Rails.application.config.assets.precompile += %w( upload.js cable.coffee)
+Rails.application.config.assets.precompile += %w( upload.css )
+
+# Rails.application.config.assets.paths << Rails.root.join("client", "assets", "stylesheets")
+# Rails.application.config.assets.paths << Rails.root.join("client", "assets", "images")
+# Rails.application.config.assets.paths << Rails.root.join("client", "assets", "fonts")
+# Rails.application.config.assets.precompile += %w( generated/server-bundle.js )
+# Add client/assets/ folders to asset pipeline's search path.
+# If you do not want to move existing images and fonts from your Rails app
+# you could also consider creating symlinks there that point to the original
+# rails directories. In that case, you would not add these paths here.
+Rails.application.config.assets.paths << Rails.root.join("client", "assets", "stylesheets")
+Rails.application.config.assets.paths << Rails.root.join("client", "assets", "fonts")
+# Rails.application.config.assets.precompile += %w( generated/server-bundle.js )
+
+(Dir::entries "#{Rails.root}/app/assets/javascripts/admin")[2..-1].each do |item|
+   Rails.application.config.assets.precompile += ["admin/#{item}"]
+end
+
+(Dir::entries "#{Rails.root}/app/assets/stylesheets/admin")[2..-1].each do |item| 
+  Rails.application.config.assets.precompile += ["admin/#{item}"]
+end
+
+
+Rails.application.config.assets.paths << Rails.root.join("vendor", "assets", "stylesheets")
+Rails.application.config.assets.paths << Rails.root.join("vendor", "assets", "images")
+Rails.application.config.assets.paths << Rails.root.join("vendor", "assets", "fonts")
+
+Rails.application.config.assets.precompile += %w( wap.js wap.css)
+Rails.application.config.assets.precompile << Proc.new { |path, fn| fn =~ /vendor\/assets\/images/ }
+
+(Dir::entries 'app/assets/javascripts/wap')[2..-1].each {|item| Rails.application.config.assets.precompile += ["wap/#{item}"]}
+(Dir::entries 'app/assets/stylesheets/wap')[2..-1].each {|item| Rails.application.config.assets.precompile += ["wap/#{item}"]}
+
+
+

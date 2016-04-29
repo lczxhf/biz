@@ -1,0 +1,42 @@
+class Admin::PromotionRuleController < Admin::ApplicationController
+
+  def edit
+  end
+
+  def index
+    @columns = ['_id', 'name', 'type', 'threshold', 'value', 'online','updated_at']    
+    do_index
+
+  end
+
+  def create
+    _params = params[:promotion_rule].to_hash
+    
+    pids = params[:product_ids].split(',').select {|item| item.present?}
+    @item = PromotionRule.create _params
+    Product.where(:id.in => pids).update_all promotion_rule_id:@item.id
+
+    redirect_to ace_path @item
+  end
+
+
+  def show
+    @item = PromotionRule.find params[:id]
+  end
+
+  def edit
+    @item = PromotionRule.find params[:id]
+  end
+
+  def update
+    @item = PromotionRule.find params[:id]
+    _params = params[:promotion_rule].to_hash
+    
+    @item.update_attributes _params
+
+    pids = params[:product_ids].split(',').select {|item| item.present?}
+    Product.where(:id.in => pids).update_all promotion_rule_id:@item.id
+    redirect_to ace_path @item
+  end
+
+end

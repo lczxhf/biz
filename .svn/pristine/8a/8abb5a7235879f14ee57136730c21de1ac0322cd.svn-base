@@ -1,0 +1,10 @@
+class Wap::ForceLoginController < Wap::ApplicationController
+  before_filter :force_login
+
+
+  def force_login
+    flash[:notice] = '请先登录'
+    redirect_to new_wap_session_path unless @current_user
+  end
+
+end

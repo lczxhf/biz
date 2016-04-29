@@ -1,0 +1,17 @@
+=render "/partials/#{action_name}_header"
+
+.tabbable
+  %ul.nav.nav-tabs.padding-12.tab-color-blue.background-blue    
+    %li.active
+      %a{:href => "#basic", "data-toggle"=>"tab"} 基本信息
+
+  .tab-content
+    #basic.tab-pane.in.active
+      =simple_form_for( @item, url:"#{ace_path_create @item}", method:"post", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form", :role => "form", id:"product-form"}) do |f| 
+
+        = f.input:name, required:true
+        = f.input:desc       
+        = f.input:link 
+        = f.input:position, as: :integer
+                
+        = render '/partials/photo', obj:@item, field: :picture, f:f

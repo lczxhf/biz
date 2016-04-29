@@ -1,0 +1,118 @@
+
+.vip.clearfix
+  %em
+    %a{:href => ""}
+      %img{src:"#{@current_user.avatar.url || '/assets/images/head.png'}"}
+  %p
+    = @current_user.mob
+    = succeed "会员等级: 注册会员" do
+      %br
+
+    = succeed "积分:" do
+      %br
+    %font 
+      = @current_user.score
+.shu
+  %ul.clearfix
+    %li
+      %a{:href => "/wap/favorite_product", :style => "border-bottom:4px solid #fc6e51;"}
+        %b>=@current_user.favorite_products.count
+        收藏的商品
+    %li
+      %a{:href => "", :style => "border-bottom:4px solid #48cfad;"}
+        %b> 0
+        我的优惠券
+    %li
+      %a{:style => "border-bottom:4px solid #ac92ec;"}
+        %b> ￥0.00
+        我的余额
+.ding
+  %ul
+    %a{:href => "/wap/order"}
+      %li
+        %em
+          
+          %img{src:"/assets/images/ico_3.png"}  
+
+        %strong 我的订单
+        %span 查看全部订单
+.dai.clearfix
+  %a{:href => "/wap/order?t=pay"}
+    %img{src:"/assets/images/ico_7.png"}  
+    - if @user_info[:wait_pay] > 0
+      %font=@user_info[:wait_pay]
+    待付款
+
+  %a{:href => "/wap/order?t=express"}
+    %img{src:"/assets/images/ico_8.png"}
+    - if @user_info[:wait_send] > 0
+      %font=@user_info[:wait_send]
+    待发货
+
+  %a{:href => "/wap/order?t=confirm"}
+    %img{src:"/assets/images/ico_9.png"}
+    - if @user_info[:wait_receive] > 0
+      %font=@user_info[:wait_receive]      
+
+    待收货
+
+  %a{:href => "/wap/order?t=comment"}
+    %img{src:"/assets/images/ico_10.png"}
+    
+    - if @user_info[:wait_comment] > 0
+      %font=@user_info[:wait_comment]    
+    待评价
+.ding.line.mb8
+  %ul
+    %a{:href => "/wap/lottery_order"}
+      %li
+        %em
+          %img{:src=>"/assets/images/record2.png"}
+        %strong 夺宝记录
+        %span{:class => "unfold"}
+          %img{:src => "/assets/images/unfold.png"}
+    %a{:href => "/wap/prize_activity/mywin_record"}
+      %li
+        %em
+          %img{:src=>"/assets/images/record.png"}
+        %strong 中奖记录
+        %span{:class => "unfold"}
+          %img{:src => "/assets/images/unfold.png"}
+
+
+.ding.line
+  %ul
+    %a{:href => "/wap/user_profile"}
+      %li
+        %em
+          %img{src:"/assets/images/ico_4.png"}
+
+        %strong 个人资料
+        %span 修改信息
+    %a{:href => "/wap/user_profile/edit_password"}
+      %li
+        %em
+          %img{src:"/assets/images/ico_5.png"}
+               
+        %strong 账号安全
+        %span 修改密码
+    %a{:href => "/wap/appointment"}
+      %li
+        %em            
+          %img{src:"/assets/images/ico_3.png"}
+          
+        %strong 预约咨询
+        %span 预约咨询
+.btn_1
+  %a{:href => "javascript:logout()"} 退出当前账号
+
+:javascript
+  var referer = '/wap/home';
+  function logout(){
+    $.get('/api/logout', function(res){
+      location.href = '/wap/home';
+    });
+  }
+
+  
+

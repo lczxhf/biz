@@ -1,0 +1,89 @@
+.datum
+  %ul#goods_albums
+    %a#img1.webuploader-container
+      .webuploader-pick
+        %li
+          %strong.mt10 头像
+          %span
+            - if @current_user.avatar
+              %img{:alt => "#{@current_user.name}", :height => "50", :src => "#{ @current_user.avatar.url(:app) }", :width => "50"}
+            - else
+              %img{:alt => "#{@current_user.name}", :height => "50", :src => "/assets/images/head.png", :width => "50"}
+            
+          %input{:type => "hidden"}
+          %input#file_up{:name => "上传", :style => "display:none;", :type => "file"}
+    %a{:href => "/wap/user_profile/edit_phone"}
+      %li
+        %strong 电话号码
+        %span 
+          = @current_user.mob
+          
+    %a{:href => "/wap/user_address"}
+      %li
+        %strong 收货地址
+        %span 立即修改
+  %ul
+    %a{:href => ""}
+      %li
+        %strong 我的优惠券
+        %span
+          %font.org 0
+          张
+    %a
+      %li
+        %strong 我的积分
+        %span{:style => "background:none;"}
+          %font.org 0
+          分
+
+
+%link{href: "/libs/webuploader/webuploader.css"}
+%script{:src => "/libs/webuploader/webuploader.js"}
+
+:javascript
+  var uploader = WebUploader.create({
+    auto: true,
+    fileVal: 'avatar',
+    // swf文件路径
+    swf: '/libs/webuploader/webuploader.swf',
+    // 文件接收服务端。
+    server: "/api/user/upload_avatar",
+    // 选择文件的按钮。可选
+    formData: {
+      "id": "#{@current_user.id.to_s}",          
+      "watermark_enable": "1",
+      "filetype_post": "jpg|jpeg|gif|bmp|png"
+    },
+    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+    pick: {
+      id: '#img1',
+      multiple: false
+    },
+    accept: {
+      title: '图片文件',
+      extensions: 'gif,jpg,jpeg,bmp,png',
+      mimeTypes: 'image/*'
+    },
+    thumb: {
+      width: '110',
+      height: '110'
+    },
+    chunked: false,
+    chunkSize: 1000000,
+    // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+    resize: false
+  });
+  uploader.onUploadSuccess = function(file, response) {        
+    var pickid = this.options.pick.id;        
+    
+    if (response.result_code == 1) {
+      $(pickid).find('img').attr('src', response.avatar);        
+    }
+  }
+
+  uploader.onUploadError = function(file, reason) {
+    hd_alert('文件上传错误：' + reason);
+  }
+
+
+    

@@ -1,0 +1,2 @@
+module Wap::FavoriteProductHelper
+end

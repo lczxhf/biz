@@ -1,0 +1,21 @@
+%dl.dldt
+  %dd
+    .swiper-container
+      .swiper-wrapper
+        #waterfall-content.swiper-slide
+          .list_d
+            - if @items.empty?
+              .none
+                %p 没有预约记录
+
+            %ul#container
+              - @items.each do |app|
+                %li                                    
+                  %p{:style => "text-align:left"}= "预约项目: #{app.product.name}"
+                  %p{:style => "text-align:left"}= "销售经理：#{app.sales_man.name}"                  
+                  %p{:style => "text-align:left"}= "预约备注：#{app.remark}"
+                  %p{:style => "text-align:left"}
+                    ="预约创建时间：#{app.c_at.strftime("%y-%m-%d %H:%M:%S")}"
+                  %p{:style => "text-align:left"}
+                    ="预约到店时间：#{app.time.strftime("%y-%m-%d %H:%M:%S")}"
+  

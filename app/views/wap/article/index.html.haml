@@ -1,0 +1,17 @@
+- Article.all.asc(:u_at).limit(12).each do |article|
+  .xiaoNow_c
+    .xiaoNow_s
+      %a.xiaoNow_s_photo{:href => "/wap/article/#{article.id}"}
+        %img{:src => "#{article.picture.url}"}
+      .xiaoNow_s_info
+        %h3.xiaoNow_tp
+          %a{:href => ""}
+            = article.name
+
+        %p.xiaoNow_pp
+          %a{:href => ""}
+            = article.brief
+
+        %p.xiaoNow_tips
+          %span.pinfo_time=article.u_at.strftime("%y-%m-%d")
+          %a.pinfo_link{:href => "/wap/article/#{article.id}"} 阅读全文

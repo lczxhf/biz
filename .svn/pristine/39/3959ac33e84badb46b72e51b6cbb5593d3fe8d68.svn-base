@@ -1,0 +1,132 @@
+- time = 1.days.ago(Time.now)
+
+.row
+  .col-xs-12.col-sm-6.widget-container-col
+    .widget-box.widget-color-dark
+      .widget-header
+        %h5.widget-title.bigger.lighter
+          %i.ace-icon.fa.fa-table
+          总览
+        
+      .widget-body
+        .widget-main.no-padding
+          %table.table.table-striped
+            %tbody
+              %tr
+                %td 商品总数
+                %td.value
+                  = @products.count
+
+              %tr
+                %td 用户总数
+                %td.value
+                  = User.count
+
+              %tr
+                %td 门店总数
+                %td.value
+                  = Shop.count   
+
+              %tr
+                %td 订单总数
+                %td.value
+                  = @orders.count
+            
+
+
+  .col-xs-12.col-sm-6.widget-container-col
+    .widget-box.widget-color-orange
+      .widget-header
+        %h5.widget-title.bigger.lighter
+          %i.ace-icon.fa.fa-cny
+          销售
+        
+      .widget-body
+        .widget-main.no-padding
+          %table.table.table-striped
+            %tbody
+              %tr
+                %td 入账
+                %td.value
+                  - money = Order.where(pay_state: 1, :c_at.gt => time).map(&:cash_amount).inject(:+)
+                  = "￥#{money}"
+
+              %tr
+                %td 新增订单
+                %td.value
+                  - new_order_num = Order.where(:c_at.gt => time).count
+                  =  new_order_num
+
+              %tr
+                %td 待发货订单
+                %td.value
+                  - wt_ship_order_num = Order.where(shipping_state:0, pay_state: 1, no_shipment:false).count
+                  = wt_ship_order_num    
+
+              %tr
+                %td 完成订单
+                %td.value
+                  - done_order_num = Order.where(pay_state: 1, state:4).count
+                  = done_order_num  
+
+.space
+.row
+  .col-xs-12.col-sm-6.widget-container-col
+    .widget-box.widget-color-blue
+      .widget-header
+        %h5.widget-title.bigger.lighter
+          %i.ace-icon.fa.fa-lemon-o
+          门店/用户
+        
+      .widget-body
+        .widget-main.no-padding
+          %table.table.table-striped
+            %tbody
+              %tr
+                %td 新增用户
+                %td.value
+                  - new_user_num = User.where(:c_at.gt => time).count
+                  = new_user_num
+
+              %tr
+                %td 新增门店
+                %td.value
+                  - new_shop_num = Shop.where(:c_at.gt => time).count
+                  = new_shop_num
+
+              %tr
+                %td 门店上线
+                %td.value
+                  - online_shop_num = Shop.where(:c_at.gt => time , state:1).count
+                  = online_shop_num
+
+  .col-xs-12.col-sm-6.widget-container-col
+    .widget-box.widget-color-green
+      .widget-header
+        %h5.widget-title.bigger.lighter
+          %i.ace-icon.fa.fa-gift
+          商品
+        
+      .widget-body
+        .widget-main.no-padding
+          %table.table.table-striped
+            %tbody
+              %tr
+                %td 上线
+                - new_product_num = Product.where(:c_at.gt => time).count
+                %td.value
+                  = new_product_num
+
+              %tr
+                %td 下线
+                %td.value
+                  = '0'    
+
+              %tr
+                %td 库存告警
+                %td.value
+                  = 0
+
+:css
+  td.value{width:30%; text-align:center;}
+                      

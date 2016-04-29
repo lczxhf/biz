@@ -1,0 +1,10 @@
+= f.label "图文详情", :class =>"control-label col-sm-3 no-padding-right"
+
+#ace-editor.wysiwyg-editor 
+  = obj.content.html_safe if obj.content
+
+%script{src:"/assets/js/jquery.hotkeys.min.js"} 
+%script{src:"/assets/js/bootstrap-wysiwyg.min.js"}
+%script{src:"/assets/js/bootbox.min.js"}
+= javascript_include_tag "rich_editor"
+

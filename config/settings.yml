@@ -1,0 +1,198 @@
+defaults: &defaults  
+  awesome_setting: <%= "Did you know 5 + 5 = #{5 + 5}?" %>
+  page:
+    page_size: 8
+  result_code:
+    sort_id_is_null: 3
+    
+  soft_version: "2015-06-30"
+  base_url: "https://api.ucpaas.com/"
+  accountSid: "940a6cd8776c013a500b5a717b9c23e1"
+  token: "5ae7be4a286fb4f2cfd1c3ff9dcaadf5"
+  appid: "88d19015494b4721a507c572f2c746a3"
+  content_type: 'application/json;charset=utf-8'
+  accept_type: "application/json"
+  err_model: 10011
+  info_10011: "模板错误"
+
+  model_type:
+    reg: "12777"   #短信注册应用模块
+    bind: "12776"
+    login: "12775"
+    password: "21299"
+    admin_reset: "21695"
+
+  order:
+    del: "100"
+    abort: "2"
+
+  sms_expire_time: 300
+  
+  
+  illegal_mob: 10010   #手机号不合法
+  info_10010:  '手机号不合法'
+  
+  success: 1
+  verify_code: 10030  #验证码失效
+  info_10030: '验证码失效'
+
+  verify_code_err: 10020  #验证码比较错误
+  info_10020: '验证码比较错误'
+
+  reg_id_exist: 10040      #注册ID已经存在
+  info_10040: '注册ID已经存在'
+
+  verify_email_key: "@$%"  #加密key
+  login_faild: 400
+  info_400: "登录失败"
+
+  resource_no_found: 404
+
+  verify_login: 600
+  info_600: "验证失败"
+
+  verify_para_fail: 601
+  info_601: "参数无效"  
+
+  db_code_err: 10000
+  info_10000: '数据错误'
+
+  reset_password: 1451
+
+  user_not_exist: 12000
+  info_12000: "用户不存在"
+
+  page_size: 8
+  sms_repeat_send: 10001
+  verify_email_notice: "验证通过,密码已发送,请查看邮箱登陆"
+  avatar_is_null: 13000
+
+  activity_is_null: 14000
+  product_is_null: 14001
+  score_not_enough: 15000
+  day_price_num: 1000
+  alipay_key: "w6mwfi4kr4zbvcvwjt4caam2nr6nbqk4"
+  alipay_partner: '2088611387551605'
+  repeat_draw: 16000
+  activity_null: 16001
+  left_money_null: 16002
+  draw_time_err: 16003
+  send_notify: '8365'
+  send_admin_pwd: '8397'
+
+  role_define:  # 全局配置需要和这里的一致
+    - manager   # 经理
+    - operator  # 操作员
+    - admin     # 后台管理员
+
+  role_list:
+    manager:      
+      car: ['create', 'read', 'update', 'destroy']
+      car_brand: ['create', 'read', 'update', 'destroy']
+      user: ['read']
+      admin_user: ['read']
+      index_banner: ['read']
+
+      sale_group: ['create', 'read', 'update', 'destroy']
+      sale_section: ['create', 'read', 'update', 'destroy']
+      sale_activity: ['create', 'read', 'update', 'destroy']
+      product: ['create', 'read', 'update', 'destroy']
+      product_spec: ['create', 'read', 'update', 'destroy']
+      sale_spec: ['create', 'read', 'update', 'destroy']
+      product_prop: ['create', 'read', 'update', 'destroy']
+      picture: ['create', 'read', 'update', 'destroy']
+
+      category: ['read']
+
+      shop: ['create', 'read', 'update', 'destroy']
+      comment: ['create', 'read', 'update', 'destroy']
+      manager: ['create', 'read', 'update', 'destroy']
+      photo: ['create', 'read', 'update', 'destroy']
+      order: [ 'create','read', 'update', 'destroy', 'action', 'batch_delete']
+      employee: ['create', 'read', 'update', 'destroy']
+      stock: ['create', 'read', 'update', 'destroy']
+      dashboard: ['read']
+      notice: ['create', 'read', 'update', 'destroy','batch_delete']
+
+    operator:
+      car: ['create', 'read', 'update', 'destroy']
+      car_brand: ['create', 'read', 'update', 'destroy']
+      user: ['read']
+      admin_user: ['read']
+      index_banner: ['read']
+
+      sale_group: ['create', 'read', 'update', 'destroy']
+      sale_section: ['create', 'read', 'update', 'destroy']
+      sale_activity: ['create', 'read', 'update', 'destroy']
+      product: ['create', 'read', 'update', 'destroy']
+      product_spec: ['create', 'read', 'update', 'destroy']
+      sale_spec: ['create', 'read', 'update', 'destroy']
+      product_prop: ['create', 'read', 'update', 'destroy']
+      picture: ['create', 'read', 'update', 'destroy']
+
+      category: ['read']
+
+      comment: ['create', 'read', 'update', 'destroy']
+      manager: ['create', 'read', 'update', 'destroy']
+      photo: ['create', 'read', 'update', 'destroy']
+      order: [ 'create','read', 'update', 'destroy', 'action']
+      stock: ['create', 'read', 'update', 'destroy']
+      dashboard: ['create']
+      notice: ['create', 'read', 'update', 'destroy','batch_delete']
+
+    admin:      
+      car_brand: ['create', 'read', 'update', 'destroy','batch_delete']
+      user: ['create', 'read', 'update', 'destroy','batch_delete']
+      admin_user: ['create', 'read', 'update', 'destroy','batch_delete']
+      index_banner: ['create', 'read', 'update', 'destroy','batch_delete']
+
+      sale_group: ['create', 'read', 'update', 'destroy','batch_delete']
+      sale_section: ['create', 'read', 'update', 'destroy','batch_delete']
+      sale_activity: ['create', 'read', 'update', 'destroy','batch_delete']
+      product: ['create', 'read', 'update', 'destroy','batch_delete']
+      product_spec: ['create', 'read', 'update', 'destroy', 'batch_delete']
+      product_prop: ['create', 'read', 'update', 'destroy','batch_delete']
+      sale_spec: ['create', 'read', 'update', 'destroy','batch_delete']
+      picture: ['create', 'read', 'update', 'destroy']
+
+      category: ['create', 'read', 'update', 'destroy', 'batch_action']
+      tag: ['create', 'read', 'update', 'destroy']
+
+      shop: ['create', 'read', 'update', 'destroy','batch_delete']
+      comment: ['create', 'read', 'update', 'destroy','batch_delete']
+      manager: ['create', 'read', 'update', 'destroy']
+      photo: ['create', 'read', 'update', 'destroy']
+
+      order: [ 'create','read', 'update', 'destroy', 'action', 'query_shippment', 'batch_delete']
+      employee: ['create', 'read', 'update', 'destroy','batch_delete']
+      stock: ['create', 'read', 'update', 'destroy','batch_delete']
+      unity: ['create', 'read', 'update', 'destroy','batch_delete']
+      unity_scan: ['create', 'read', 'update', 'destroy','batch_delete']
+      unity_share: ['create', 'read', 'update', 'destroy','batch_delete']
+      wxpay_config: ['create', 'read', 'update', 'destroy']
+      alipay_config: ['create', 'read', 'update', 'destroy']
+      pay_config: ['create', 'read', 'update', 'destroy']
+      express: ['create', 'read', 'update', 'destroy','batch_delete']
+      dashboard: ['create', 'read', 'update', 'destroy']
+      
+      message: ['create', 'read', 'update', 'destroy','batch_delete']
+      shipping_rule: ['create', 'read', 'update', 'destroy','batch_delete']
+      promotion_rule: ['create', 'read', 'update', 'destroy','batch_delete']
+      order_product_comment:  ['create', 'read', 'update', 'destroy','batch_delete']
+      notice: ['create', 'read', 'update', 'destroy','batch_delete']
+      validate_code: ['create', 'read', 'update', 'destroy','batch_delete']
+      unity_product: ['create', 'read', 'update', 'destroy','batch_delete']
+
+  seller_email: 'webmaster@lmoar.com'  
+
+  site_url: 'http://m.lmoar.com/'
+
+development:
+  <<: *defaults
+  neat_setting: 800
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

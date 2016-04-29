@@ -1,0 +1,74 @@
+= render '/partials/index_header'
+
+.space-8
+.row    
+  .col-sm-12
+    .dd#nestable.col-sm-12
+      %ol.dd-list.col-sm-12
+        -@cats.each do |cat|
+          .col-sm-6            
+            = render partial:"/admin/category/cat", locals: {item:cat}                                
+
+
+:javascript
+  jQuery(function($){
+              
+    var updateOutput = function(e){
+        
+        var r = $('.dd').nestable('serialize');
+        all_cats = JSON.stringify(r);
+
+        $.post("/admin/category/batch_action?type=update_all",
+            {data: all_cats},    
+            function(json) {
+                console.log("success");
+            }
+        );    
+    };
+    
+    $('.dd').nestable().on("change", updateOutput);
+
+    $('.dd-handle a').on('mousedown', function(e){
+        e.stopPropagation();
+    });
+    
+    $('[data-rel="tooltip"]').tooltip();
+  });
+
+  function delete_selected_item(item_id){
+      
+      $.ajax({
+        url: "/admin/#{controller_name}/" + item_id,
+        type: 'DELETE',
+        success: function(result) {          
+          if(result["result_code"] == 1){          
+            $("li[data-id="+ "'" +item_id +  "']").fadeOut();            
+          }else{
+            console.log("error");
+          }
+        }
+      });
+    }
+
+  $("a.delete").on('click', function(e) {
+    e.preventDefault();
+    var item_id = $(this).parents(".dd-item")[0].getAttribute("data-id");
+
+    var d = dialog({
+      title: "警告",
+      content: '确定删除所选项目？ 删除后不能恢复',
+      okValue: '确定',
+      ok: function () {
+          this.title('提交中…');
+          delete_selected_item(item_id);
+          return true;
+
+      },
+      cancelValue: '取消',
+      cancel: function () {this.close(); return false;}
+    });
+
+    d.show();
+  });  
+
+       

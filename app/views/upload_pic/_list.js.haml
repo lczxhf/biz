@@ -1,0 +1,7 @@
+- @screenshots.each do |screenshot|
+  %li.screenshot{:id => "pic-#{screenshot.id}"}
+    %div
+      %a{:href => "#{screenshot.picture.url}", :target => "_blank"}
+        %img{:src => "#{screenshot.picture.thumb.url}"}/
+    .img-delete
+      %a{:href => "javascript:void(0)", :onclick => "delete_pic(" + "'" + "#{screenshot.id}" + "'"+ ")" }

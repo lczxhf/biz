@@ -1,0 +1,2 @@
+module Wap::MiscHelper
+end

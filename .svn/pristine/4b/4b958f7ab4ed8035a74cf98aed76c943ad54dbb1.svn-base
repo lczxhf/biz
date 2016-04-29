@@ -1,0 +1,13 @@
+.footer
+  .footer-inner
+    .footer-content
+      %span.bigger-120
+        %span.blue.bolder LingMo
+        Application &#169; 2015-2016
+      \&#160; &#160;
+      %span.action-buttons
+        %a{:href => "#"}
+          %i.ace-icon.fa.fa-weibo.orange.bigger-150
+
+        %a{:href => "http://m.kuaidi100.com", :target => "_blank"} 快递查询  
+              

@@ -1,0 +1,17 @@
+= render '/partials/new_header'
+.tabbable
+  %ul.nav.nav-tabs.padding-12.tab-color-blue.background-blue    
+    %li.active
+      %a{:href => "#basic", "data-toggle"=>"tab"} 基本信息
+
+  .tab-content
+    #basic.tab-pane.in.active
+      =simple_form_for( @item, url:"#{ace_path_create @item}", method:"post", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form", :role => "form", id:"product-form"}) do |f| 
+
+        = f.input:username, required:true, hint:"登录账号,请使用手机号码"
+        = f.input:name, required:true, hint:"昵称"
+        = f.input:password
+        = f.input:password_confirmation
+        = f.input:role, as: :select, collection: ["admin", "manager", "employee"]
+        = render '/partials/submit', f:f    
+        

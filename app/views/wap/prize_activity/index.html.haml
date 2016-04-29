@@ -1,0 +1,24 @@
+=javascript_include_tag 'cable'
+=javascript_include_tag "wap/#{controller_name}"
+
+
+.w-goodsList
+  %ul
+    - @items.each do |item|
+      %li
+        .w-goodsList-l
+          %a{:href => "#{wap_prize_activity_path item}"}
+            %img{:src => "#{item.prize.pictures.first.url}"}
+        .w-goodsList-r
+          %h2= item.name
+          .goodsList-mt{'item-id':"#{item.id}"}
+            %p.wrap
+              %span.bar.prize_progress{:style => "width:79.7%;"}
+                %i.color
+            .people
+              %span= "总需#{item.total_share}人次"
+              %span.underway-r
+                剩余
+                %em.prize_remain="#{item.total_share - item.saled_share}"
+          .w-goods-shortFunc
+            %button.w-button.w-button-round.w-button-addToCart

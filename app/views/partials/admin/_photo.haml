@@ -1,0 +1,14 @@
+%li{"data-id":"#{photo.id}"}
+  %div
+    %img{width:"auto", height:"150", src:"#{photo.url}"}
+    .text
+      .inner
+        %span 
+          = photo.variant.option_values.map(&:name) if photo.variant.option_values
+
+        %br
+        %a{href:"#{photo.url}", "data-rel"=>"colorbox"}
+          %i.ace-icon.fa.fa-search-plus
+
+        %a{href:"javascript:void(0)", "onclick" => "delPhoto(this)"}
+          %i.ace-icon.fa.fa-times.red{"photo-id" => "#{photo.id.to_s}"}}

@@ -1,0 +1,8 @@
+
+:plain
+  var selector = 'ul.gallery';
+
+  var html = "#{j render '/partials/admin/photo', remote:true ,photo:@photo}";
+
+  $(selector).prepend(html);
+    

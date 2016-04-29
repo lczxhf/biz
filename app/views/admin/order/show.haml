@@ -1,0 +1,405 @@
+.widget-box.widget-color-purple
+  .widget-header.widget-header-small
+    %h6.widget-title.smaller 
+    = "订单号 #{@item.sn}  / #{@item.get_display :pay_state}  / #{@item.get_display :shipping_state}"
+    .widget-toolbar
+      .widget-menu
+        %a.green{:href => "/admin/order"}
+          %i.ace-icon.fa.fa-arrow-left
+
+        %a.green{:href => "#order_record", "data-toggle" => "modal" } 操作日志
+
+      %a{"data-action" => "reload", :href => "#"}
+        %i.ace-icon.fa.fa-refresh
+      %a{"data-action" => "collapse", :href => "#"}
+        %i.ace-icon.fa.fa-chevron-up
+      
+  .widget-body
+    .widget-main
+      %ul.steps
+        - if @item.is_refund?
+
+          %li.active{"data-step" => "1"}
+            %span.step 1
+            %span.title 待退货确认
+          %li{"data-step" => "2", class:"acitve"}
+            %span.step 2
+            %span.title 待退货入库
+          %li{"data-step" => "3"}
+            %span.step 3
+            %span.title 待退款
+          %li{"data-step" => "4"}
+            %span.step 4
+            %span.title 完成
+
+        -elsif @item.pay_state == 2
+          %li.active{"data-step" => "1"}
+            %span.step 1
+            %span.title 退款
+
+          %li.active{"data-step" => "4"}
+            %span.step 2
+            %span.title 完成
+
+        -elsif @item.state == 99
+          %li.active{"data-step" => "1"}
+            %span.step 1
+            %span.title 取消
+
+          %li.active{"data-step" => "4"}
+            %span.step 2
+            %span.title 完成  
+
+        - else
+          %li.active{"data-step" => "1"}
+            %span.step 1
+            %span.title 待支付
+
+          - unless @item.no_shipment
+            %li{"data-step" => "2", "id" => "state-1", class:"#{'active' if @item.pay_state == 1}"}
+              %span.step 2
+              %span.title 待发货
+
+          - if @item.is_assemble?
+
+            - unless @item.no_shipment
+              %li{"data-step" => "3", "id" => "state-3", class:"#{'active' if @item.is_shipping? or @item.is_shipped?}"}
+                %span.step 3
+                %span.title 待收货
+
+            %li{"data-step" => "4", "id" => "state-3", class:"#{'active' if @item.is_shipped?}"}
+              %span.step 4
+              %span.title 待安装
+
+            %li{"data-step" => "5", class:"#{'active' if @item.state == 4}"}
+              %span.step 5
+              %span.title 完成
+
+          - else
+
+            %li{"data-step" => "3", "id" => "state-2", class:"#{'active' if @item.is_shipped?}"}
+              %span.step 3
+              %span.title 待收货
+
+            %li{"data-step" => "4", class:"#{'active' if @item.state == 4}"}
+              %span.step 4
+              %span.title 完成
+
+    .widget-toolbox.padding-8.clearfix
+      - unless @item.is_refund?
+        %button.btn.btn-xs.btn-light.disabled 订单操作
+
+        %button.btn.btn-xs.btn-link#action_send_goods{class:"#{'disabled' unless @item.can_send_goods?}"} 确认发货              
+
+        - if @item.is_assemble? 
+          %button.btn.btn-xs.btn-link#action_sign_goods.actions{class:"#{'disabled' if @item.shipping_state != 1}"} 门店收货
+
+        %button.btn.btn-xs.btn-link#action_cancel.actions{class:"#{'disabled' unless @item.can_cancel?}"}  取消订单  
+
+        %button.btn.btn-xs.btn-link#action_done.actions{class:"#{'disabled' unless @item.can_done?}"} 确认完成
+
+      - else
+        %button.btn.btn-xs.btn-light.disabled 退单操作        
+        %button.btn.btn-xs.btn-link#action_confirm_refund.actions 退货确认
+        %button.btn.btn-xs.btn-link#action_sign_refund.actions 退货签收
+
+      %button#print_goods.btn.btn-xs.btn-success.pull-right
+        %span.bigger-110 打印发货单
+        %i.ace-icon.fa.fa-print.icon-on-right
+
+      - if @item.express
+        %button#query_shippment.btn.btn-xs.btn-info
+          %span.bigger-110 物流查询
+          %i.ace-icon.fa.fa-truck.icon-on-right  
+         
+.space
+#print-media
+  .widget-box.widget-color-green
+    .widget-header.widget-header-small
+      %h6.widget-title.smaller 收件人
+
+      .widget-toolbar
+        %a{"data-action" => "collapse", :href => "#"}
+          %i.ace-icon.fa.fa-chevron-up
+
+    .widget-body
+      .widget-main
+
+        %table.table.table-striped.table-bordered.table-hover
+          %thead
+            %tr        
+        
+              %th 收件人
+              %th 电话
+              %th 邮编
+              %th 地址
+          %tbody
+            %tr
+              %td  
+                = @item.consignee
+              %td 
+                = @item.mobile
+              %td 
+                = @item.zipcode
+              %td
+                = @item.readable_address    
+
+        - if @item.remark and !@item.remark.empty?
+          .well.small-well
+            %span 
+              = @item.remark
+  
+
+  .space
+  .widget-box.widget-color-pink.order-product
+    .widget-header.widget-header-small
+      %h6.widget-title.smaller 商品清单
+      .widget-toolbar
+        %span  
+          = "总价 #{@item.cash_amount}"
+          %i.ace-icon.fa.fa-rmb
+
+        %a{"data-action" => "collapse", :href => "#"}
+          %i.ace-icon.fa.fa-chevron-up
+
+    .widget-body
+      .widget-main
+        %table.table.table-striped.table-bordered.table-hover
+          %thead
+            %tr        
+        
+              %th 名称
+              %th 规格
+              %th 单价
+              %th 数量
+          %tbody
+            - @item.order_products.each do |op|
+              %tr
+                %td 
+                  %a{href:"#{ace_path op.variant.product}"}
+                    = op.name
+
+                %td
+                  = op.variant.option_values.map(&:name)
+                %td 
+                  = op.price
+                %td         
+                  = op.num
+
+        %span.label.label-pink.arrowed-right 现金优惠
+        %span 
+          = "￥#{@item.cash_discount}"
+        
+        %span.label.label-purple.arrowed-right 积分抵扣
+        %span 
+          = @item.score_discount
+
+        %span.label.label-purple.arrowed-right 运费
+        %span 
+          = @item.shipping_fee  
+
+        - if @item.pay_state == 0
+          %button#modify_total_fee.btn.btn-xs.btn-danger.pull-right
+            %span 修改总价
+            %i.ace-icon.fa.fa-pencil.icon-on-right  
+
+.space.no-print
+- if @item.pay_state == 1
+  .widget-box.widget-color-dark.shipment
+    .widget-header.widget-header-small
+      %h6.widget-title.smaller 支付配送方式
+      .widget-toolbar      
+        .widget-menu
+        %a{"data-action" => "collapse", :href => "#"}
+          %i.ace-icon.fa.fa-chevron-up
+
+    
+    .widget-body
+      .widget-main
+        %span.label.label-white.arrowed-right 支付方式
+        %span 
+          = @item.get_display :pay_channel
+
+        - if @item.express
+          .col-sm-5
+            %span.label.label-white.arrowed-right 配送方式
+            %span
+              = @item.express.name + " " + @item.express_sn      
+
+
+#modal-form.modal{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"} ×
+        %h4.blue.bigger 补充快递信息
+      .modal-body
+        =simple_form_for( @item, url:"#{ace_path @item}", method:"put", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form", :role => "form", id:"product-form"}) do |f| 
+
+          = f.input:express, collection: Express.all, selected: @item.express
+          = f.input:express_sn
+          %input.hide{name:"act", value:1}
+          = render '/partials/submit', f:f      
+
+
+#modal_modify_total_fee.modal{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"} ×
+        %h4.red.bigger 修改总价
+      .modal-body
+        =simple_form_for( @item, url:"#{ace_path @item}", method:"put", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form", :role => "form", id:"product-form"}) do |f| 
+
+          = f.input:cash_amount          
+          %input.hide{name:"act", value:2}
+          = render '/partials/submit', f:f               
+
+
+#order_record.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header.no-padding
+        .table-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"}
+            %span.white &#215;
+          操作日志
+      .modal-body.no-padding
+        %table.table.table-striped.table-bordered.table-hover.no-margin-bottom.no-border-top
+          %thead
+            %tr
+              %th 时间
+              %th 操作员
+              %th 操作
+              %th 订单/支付/物流
+              %th ip
+              
+          %tbody
+            - @item.order_records.desc(:c_at).each do |r|
+              %tr
+                %td
+                  = r.c_at.strftime("%y-%m-%d %H:%m:%S")
+                
+                %td
+                  - if r.admin_user
+                    = r.admin_user.username
+                  - else
+                    = @item.user.mob
+
+                %td
+                  = r.action_note
+                      
+                %td
+                  - st = Order.class_kv_enum :state, r.state
+                  - pay_st = Order.class_kv_enum :pay_state, r.pay_state
+                  - shipping_st = Order.class_kv_enum :shipping_state, r.shipping_state  
+                  = "#{st}, #{pay_st}, #{shipping_st}"
+
+                %td
+                  = r.client_ip  if r.client_ip
+                
+            
+      .modal-footer.no-margin-top
+        %button.btn.btn-sm.btn-danger.pull-right{"data-dismiss" => "modal"}
+          %i.ace-icon.fa.fa-check
+          确定
+
+#shippment_record.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header.no-padding
+        .table-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"}
+            %span.white &#215;
+          物流查询
+      .modal-body.no-padding
+        %table.table.table-striped.table-bordered.table-hover.no-margin-bottom.no-border-top
+          %thead
+            %tr
+              %th 时间
+              %th 事件                            
+          %tbody.shippment            
+
+            
+      .modal-footer.no-margin-top
+        %button.btn.btn-sm.btn-danger.pull-right{"data-dismiss" => "modal"}
+          %i.ace-icon.fa.fa-check
+          确定
+
+:css
+  @media print {
+    a[href]:after {
+      content: none !important;
+      }
+  }              
+
+:javascript
+
+  $("#action_send_goods").on("click", function(e){      
+    $("#modal-form").modal();
+  });
+
+  $(".actions").on("click", function(e){
+     var d = dialog({
+      title: "订单操作",
+      content: '确定  ' + $(e.target).text() + "?",
+      okValue: '确定',
+      ok: function () {
+          this.title('提交中…');
+          
+          $.post("/admin/order/#{@item.id.to_s}/action", 
+            {"act": $(e.target).attr("id")}, 
+            function(data, state){
+              window.location.reload();
+            });
+          return true;
+      },
+      cancelValue: '取消',
+      cancel: function () {}
+    });
+
+    d.show();      
+
+  });
+
+  $("#print_goods").on("click", function(e){
+    $("#print-media").print(
+      {
+          //Use Global styles
+          globalStyles : true,
+          
+          mediaPrint : false,
+          //Custom stylesheet
+          //stylesheet : "http://fonts.googleapis.com/css?family=Inconsolata",
+          //Print in a hidden iframe
+          iframe : true,
+          //Don't print this
+          noPrintSelector : ".avoid-this",
+          //Add this at top
+          prepend : "随货发送<br/>",
+          //Add this on bottom
+          append : "<br/>随货发送!"
+      }
+    );
+  });
+
+  $("#query_shippment").on("click", function(e){
+      $.get("/admin/order/#{@item.id}/query_shippment",           
+        function(data, state){
+          console.log(state);
+          console.log(data);
+
+          $("tbody.shippment tr").remove();
+          data.map(function(i){
+            var d = $("<tr><td>" + i.time + "</td>" +   "<td>" + i.context + "</td></tr>");
+            $("tbody.shippment").append(d);
+          });            
+
+          $("#shippment_record").modal();
+
+        });
+  });
+
+  $("#modify_total_fee").on("click", function(e){      
+    $("#modal_modify_total_fee").modal();
+  });

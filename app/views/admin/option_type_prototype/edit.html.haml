@@ -1,0 +1,30 @@
+= render '/partials/edit_header'
+
+.tabbable
+  %ul.nav.nav-tabs.padding-12.tab-color-blue.background-blue
+    %li
+      %a{:href => "#"} 模板
+
+  .tab-content
+    #property.tab-pane.active
+      = simple_form_for( @item,  url:"#{ace_path  @item}", method:"put", wrapper: :horizontal_form, :html => { :class => "form-horizontal", :role => "form" , :id => 'option-form'}) do |f|
+
+        = f.input:name,   required:true
+
+        .form-group
+          = f.label "选项名称", :class =>"control-label col-sm-3 no-padding-right"
+
+          .col-sm-5.col-xs-12
+            %select.chosen-select.tag-input-style.col-xs-12{"data-placeholder" => "选择选项", :multiple => "multiple", name:"option_type_prototype[option_type_ids][]", form:"option-form"}
+              - OptionType.each do |option|
+
+                -if @item.option_types.include? option          
+                  %option{:value => "#{option.id}", :selected => "true"} 
+                    = option.name
+                -else
+                  %option{:value => "#{option.id}"} 
+                    = option.name
+
+        = render '/partials/submit', f:f  
+
+= javascript_include_tag 'ace_chosen'        

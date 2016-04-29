@@ -1,0 +1,14 @@
+.classify
+  - @categories.each do |cat|
+    %h3
+      %strong=cat[:text]
+    %ul.clearfix      
+      %li
+        %a{:href => "/wap/product?category=#{cat[:id]}"} 全部
+
+      - cat[:children].each do |child|  
+        %li
+          %a{:href => "/wap/product?category=#{child[:id]}"}
+            = child[:text]
+  
+.category_bottom

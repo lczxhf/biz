@@ -1,0 +1,21 @@
+.page-header
+  %h1
+    支付方式
+    %small
+      %i.ace-icon.fa.fa-angle-double-right
+      微信支付
+
+
+.tab-content
+  #basic.tab-pane.in.active
+    =simple_form_for( @item, url:"#{ace_path  @item}", method:"put", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form", :role => "form", id:"product-form"}) do |f| 
+
+      = f.input:name, required:true
+      = f.input:desc
+      = f.input :is_open, label: "是否打开" ,as: :select, hint: "支持该支付方式" 
+
+      = f.input :app_id, label: "app_id", hint: "微信appid" 
+      = f.input :mch_id, label: "商户号" , hint: "微信支付分配的商户收款账号" 
+      = f.input :api_key, label: "API密钥(key)" , hint: "交易过程生成签名的密钥" 
+      = f.input :app_secret, label: "AppSecret" , hint: "APPID对应的接口密码,获取接口调用凭证access_token时使用" 
+      = render '/partials/submit', f:f

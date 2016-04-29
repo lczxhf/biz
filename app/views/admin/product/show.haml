@@ -1,0 +1,129 @@
+.page-header
+  %h1
+    商品管理
+    %small
+      %i.ace-icon.fa.fa-angle-double-right
+      查看商品
+
+
+    %small.col-9.pull-right
+      %a{href:"#{ace_path @item, :edit}"}
+        %span.green
+          %i.ace-icon.fa.fa-pencil-square-o 
+            编辑
+
+      %a{href:"/admin/order_product_comment?product_id=#{@item.id}"} 
+        %span.blue 商品评价      
+
+.tabbable
+  %ul#myTab4.nav.nav-tabs.padding-12.tab-color-blue.background-blue
+    %li.active
+      %a{:href => "#basic", "data-toggle"=>"tab"} 基本信息
+
+    %li
+      %a{:href => "#option","data-toggle"=>"tab"} 购买选项
+
+    %li
+      %a{:href => "#prop", "data-toggle"=>"tab"} 属性
+
+    %li
+      %a{:href => "#detail","data-toggle"=>"tab"} 详情
+
+    %li
+      %a{:href => "#gallery","data-toggle"=>"tab"} 图册      
+    
+
+  .tab-content
+    #basic.tab-pane.in.active
+      =simple_form_for( @item, url:"#{ace_path @item}", method:"put", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form"}) do |f| 
+
+        = f.input:name
+        = f.input:brief        
+        = render '/partials/switch', field: :is_hot, default: @item.is_hot, hint:"如果yes, 出现在首页商品区列表中", f:f
+
+        = f.input:state, collection: @item.class.get_field_display(:state)
+        = f.input:price, as: :float ,required:true
+        = f.input:score, as: :integer, hint: "用户购买商品获得的积分" #collection: (0..100).map{|x|x*5}
+
+        .form-group
+          = f.label :category, :class =>"control-label col-sm-3 no-padding-right"
+          .col-sm-9      
+            #select-children.col-xs-10.col-sm-5      
+              -unless @item.new_record?
+                -@data[:default].each do |item|
+                  %select.cat-select.select-items{level:"#{item[:level]}", id:"select-level-#{item[:level]}"}
+                    %option{value:"#{item.id}"}
+                      =item.name
+                    -item.brothers.each do |b|
+                      %option{value:"#{b.id}"}
+                        =b.name
+              -else
+                %select#select-level-0.select-items{level:"0"}
+                  -@data[:items].each do |item|
+                    %option{value:"#{item.id}"}
+                      =item.name
+
+        = f.input :has_assemble_fee, label: "是否需要安装" ,as: :select, hint: "如果yes,线下门店可以选择支持该产品安装服务" 
+        = f.input :assemble_fee, label: "安装费" , hint: "预计最高安装费，用于门店参考"      
+
+        = f.input :property_type_prototype_id, collection: PropertyTypePrototype.all, prompt: "选择一个属性模板"   
+
+        .form-group
+          = f.label "选项名称", :class =>"control-label col-sm-3 no-padding-right"
+
+          .col-sm-5.col-xs-12
+            %select.chosen-select.tag-input-style.col-xs-12{"data-placeholder" => "选择选项", :multiple => "multiple", name:"product[default_option_type_ids][]", form:"product-form"}
+              - OptionType.each do |option|
+
+                -if @item.option_types.include? option          
+                  %option{:value => "#{option.id}", :selected => "true"} 
+                    = option.name
+                -else
+                  %option{:value => "#{option.id}"} 
+                    = option.name
+                    
+
+        .form-group
+          = f.label "运费模板", :class =>"control-label col-sm-3 no-padding-right"
+
+          .col-sm-5.col-xs-12
+            %select.chosen-select.tag-input-style.col-xs-12{"data-placeholder" => "选择选项", :multiple => "multiple", name:"product[shipping_rule_ids][]", form:"option-form"}
+              - ShippingRule.each do |rule|
+
+                -if @item.shipping_rules.include? rule          
+                  %option{:value => "#{rule.id}", :selected => "true"} 
+                    = rule.name
+                -else
+                  %option{:value => "#{rule.id}"} 
+                    = rule.name        
+  
+    #option.tab-pane.in
+      =simple_form_for( @item, url:"#{ace_path @item}", method:"put", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form"}) do |f| 
+        - @item.variants.desc(:u_at).each do |variant|  
+          = render "/partials/admin/variant" , variant:variant    
+
+    #prop.tab-pane.in      
+      
+      - @item.product_property_types.each_with_index do |prop,index|          
+        .show-row   
+          %span.col-sm-4.name
+            = prop.name
+
+          %span.col-sm-2.value      
+            = prop.value
+          .clear      
+
+    #detail.tab-pane.in
+      = h @item.content.html_safe if @item.content
+   
+    #gallery.tab-pane      
+      -@action_url = "/admin/photo?product_id=#{@item.id.to_s}"
+      -@photos = @item.get_photos
+      = render '/partials/gallery'      
+
+:javascript
+  $("#dropzone").hide();
+  $("#basic").resize();
+
+= javascript_include_tag 'ace_chosen'
+

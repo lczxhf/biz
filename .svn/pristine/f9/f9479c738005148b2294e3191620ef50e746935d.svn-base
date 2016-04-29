@@ -1,0 +1,6 @@
+$('#screenshots_list').children().each(function(index, item){
+if ($(item).attr('id') != 'file-uploader') {
+$(item).remove();
+};
+});
+$('#screenshots_list #file-uploader').before("#{escape_javascript(render :partial => 'list')}")

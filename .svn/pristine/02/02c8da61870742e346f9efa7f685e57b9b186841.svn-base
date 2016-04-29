@@ -1,0 +1,65 @@
+class LotteryOrderItem
+  include  BaseModel
+
+  has_many :lotteries
+
+  field :num, type: Integer   # 元
+  belongs_to :prize_activity  
+  belongs_to :lottery_order
+
+
+  def update_prize
+    lotteries.each{|i| i.touch}
+    prize_activity.update_by_lottery
+  end
+
+  def is_winner?
+    return false if prize_activity.lucky_no.nil?
+    
+    self.lotteries.map(&:seq).include? prize_activity.lucky_no
+  end
+
+  #before pay
+  def lock_lottery
+    # lottery_count = 0
+    # while lottery_count < num
+    #   lottery = prize_activity.lotteries.where(:random.gt => rand, used:false).first
+    #   if lottery
+    #     lottery_count += 1
+    #     lottery.used = true
+    #     lottery.save
+    #   end
+    # end    
+  end
+
+  # 3 分钟 无支付 
+  def unlock_lottery
+    # self.lotteries.each do |lottery|
+
+    # end
+  end
+
+  # 支付前, 检查一下剩余 lottery数目是否够
+  def can_pay?
+    self.prize_activity.remain_share >= self.num
+  end
+
+  def on_pay_done
+    lottery_count = 0
+
+    while lottery_count < num
+      lottery = prize_activity.lotteries.where(:random.gt => rand, used:false).first  # random get lottery
+
+      if lottery
+        lottery_count += 1
+        lottery.lottery_order_id = self.id
+        lottery.used = true
+        lottery.save
+      end
+
+      return if prize_activity.lotteries.where(used: false).empty?  # over sell 超卖
+    end    
+
+  end
+
+end

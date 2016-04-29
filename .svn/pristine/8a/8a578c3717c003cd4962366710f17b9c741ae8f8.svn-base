@@ -1,0 +1,28 @@
+%script{src:"/assets/js/dropzone.min.js"}
+%script{src:"/assets/js/jquery.colorbox.min.js"}
+
+%div
+  %ul.ace-thumbnails.clearfix
+    -@photos.each do |photo|
+      %li
+        %div
+          %img{width:"auto", height:"150", src:"#{photo.url}"}
+          .text
+            .inner
+              %span see!
+
+              %br
+              %a{href:"#{photo.url}", "data-rel"=>"colorbox"}
+                %i.ace-icon.fa.fa-search-plus
+
+              %a.delete-photo{href:"javascript:void(0)"}
+                %i.ace-icon.fa.fa-times.red{"photo-id" => "#{photo.id.to_s}"}
+%br                    
+%div
+  %form#dropzone.dropzone{:action => "#{@action_url}", method:"post", enctype:"multipart/form-data" }
+    .fallback
+      %input{:multiple => "multiple", :name => "file", :type => "file"}
+
+
+= javascript_include_tag "mydropzone"
+

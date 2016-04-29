@@ -1,0 +1,24 @@
+.show-row    
+  %span.col-sm-1.name
+    = '价格:'       
+  %span.col-sm-1.value
+    %input{value: "#{variant.price}", name:"variant[#{variant.id}][price]"}
+
+  %span.col-sm-1.name
+    = 'SKU:'       
+  %span.col-sm-1.value                      
+    %input{value: "#{variant.sku}", name:"variant[#{variant.id}][sku]"}
+
+  %span.col-sm-1.name
+    = '库存:'       
+  %span.col-sm-2.value                      
+    %input{value: "#{variant.stock}", name:"variant[#{variant.id}][stock]"}
+
+  %span.col-sm-2.value        
+    = variant.option_values.map(&:name) 
+
+  %span.col-sm-2.value  
+    %a.delete-variant{href:"javascript: void(0)"}
+      %i.red.ace-icon.fa.fa-close.bigger-130{variant:"#{variant.id}"}
+
+.clear    

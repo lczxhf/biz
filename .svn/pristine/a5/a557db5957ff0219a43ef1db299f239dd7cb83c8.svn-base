@@ -1,0 +1,16 @@
+<html>
+<head>
+  <title>Demo</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<h1 class="alert alert-info this-works">Client Rendering</h1>
+<%= react_component("HelloWorldApp",
+                     props: @hello_world_props,
+                     prerender: false) %>
+
+</body>
+</html>                     

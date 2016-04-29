@@ -1,0 +1,2 @@
+module Wap::UserAddressHelper
+end

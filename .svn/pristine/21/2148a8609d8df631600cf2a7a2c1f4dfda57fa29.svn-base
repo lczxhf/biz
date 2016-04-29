@@ -1,0 +1,54 @@
+class PrizeActivity
+  include  BaseModel
+
+  
+  field :name, type: String
+  field :begin_time, type:Time
+  field :lucky_no, type:Integer
+
+  scope :ongoing, ->{ where(:begin_time.lt =>  Time.now)}  
+  
+  has_many :lotteries
+  has_many :lottery_cart_items, autosave: true
+  has_many :lottery_order_items
+  belongs_to :prize
+
+  after_create :init_lotteries
+
+  def init_lotteries
+    (0...self.prize.total_share).each do  |i|
+      lottery = Lottery.create prize_activity:self, seq:(i + 10000001)
+    end
+  end
+
+  def update_by_lottery
+    return if lotteries.where(:lottery_order => nil).exists?
+    lucky_no = calc_lucky_no
+    save
+  end
+
+  def calc_lucky_no
+    lotteries.desc(:u_at).limit(50).map(&:u_at).map(&:to_digital).inject(&:+) % prize.total_share + 10000001    
+  end
+
+  def is_done?
+    !lucky_no.nil?
+  end
+
+  def total_share
+    prize.total_share
+  end
+
+  def saled_share
+    total_share - remain_share
+  end
+
+  def remain_share
+    lotteries.where(:used => false).count
+  end
+
+  def prev_activity
+    PrizeActivity.where(prize: prize, :begin_time.lt => self.begin_time).asc(:begin_time).last
+  end
+
+end

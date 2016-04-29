@@ -1,0 +1,56 @@
+.pad50  
+  - carts = CartLineItem.get_cart(@current_user)
+  - total_price = line_num = 0
+  - carts.each do |item|
+    - total_price += (item[:price].to_f * item[:num].to_i)
+    - line_num += item[:num]
+
+    %form{:action => "keyword", :onsubmit => "return false;"}
+      %dl.shop.selected{:checked_ids => "", "data-id" => "#{item[:variant_id]}", "data-num" => "#{item[:num].to_i}", "data-price" => "#{item[:price]}"}
+        %dt
+          %strong
+            %img{:src => "/assets/images/ico_26.png"}
+            ="规格：#{item[:option_values].join(',') }"
+          %span
+            %a.delCart{:href => "javascript:;"}
+              %img{:src => "/assets/images/ico_27.png"}
+        %dd.clearfix
+          %em.hover
+            %img{:alt => "", :src => "#{item[:photo]}"}
+          %p
+            %a{:href => "/wap/product/#{item[:product_id]}"}
+              = item[:name]
+            %span
+              %b.org= "￥#{item[:price]}"
+              ×
+              %input.goods_num{:autocomplete => "off", "data-key" => "", :type => "number", :value => "#{item[:num]}"}
+            %input.hide{:type => "submit", :value => "submit"}
+
+  .btnF
+    %span.select_all.hover 全选
+    %a#btn_buy.btnBlue1.hover{:href => "javascript:;"} 结算
+    %p
+      %strong.org
+        合计：
+        %em#total.normal= total_price
+      结算商品数量：
+
+      %em#nums.normal= line_num 
+      件
+
+  .none1.hide
+    %img{:src => "/assets/images/bg_5.png"}
+    %p 您的购物车还是空的
+    %p
+      %a{:href => "/wap/home"} 先去逛逛
+
+:css
+  body {
+    padding-bottom: 48px!important;
+  }
+
+=javascript_include_tag "wap/#{controller_name}"
+- if carts.empty?
+  :javascript
+    $(".btnF").hide();
+    $(".none1").show();

@@ -1,0 +1,29 @@
+= render '/partials/edit_header'
+
+.tabbable
+  %ul.nav.nav-tabs.padding-12.tab-color-blue.background-blue
+    %li
+      %a{:href => "#"} 选项
+
+  .tab-content
+    #property.tab-pane.active
+      = simple_form_for( @item,  url:"#{ace_path  @item}", method:'put', wrapper: :horizontal_form, :html => { :class => "form-horizontal", :role => "form" , :id=>'option-form'}) do |f|
+
+        = f.input:name,   required:true
+
+        .form-group
+          = f.label "option_values", :class =>"control-label col-sm-3 no-padding-right"
+          .col-sm-5.col-xs-12
+            %select.chosen-select.tag-input-style.col-xs-12{"data-placeholder" => "选择品牌", :multiple => "multiple", name:"option_type[option_value_ids][]", form:"option-form"}
+              - OptionValue.each do |opt|          
+                -if @item.option_values.include? opt          
+                  %option{:value => "#{opt.id}", :selected => "true"} 
+                    = opt.name
+                -else
+                  %option{:value => "#{opt.id}"} 
+                    = opt.name
+
+        = link_to '新增可选值', new_admin_option_value_path, remote: true
+        = render '/partials/submit', f:f  
+
+=javascript_include_tag 'ace_chosen'

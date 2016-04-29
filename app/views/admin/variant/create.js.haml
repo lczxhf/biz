@@ -1,0 +1,7 @@
+- if @item.errors.blank?
+  :plain
+    var selector = '.option-form';
+    
+    var html = "#{j render '/partials/admin/variant', remote:true ,variant:@item}";
+    $(selector).prepend(html);
+    

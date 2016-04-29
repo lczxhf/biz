@@ -1,0 +1,73 @@
+%script{src:"/assets/js/dropzone.min.js"}
+%script{src:"/assets/js/jquery.colorbox.min.js"}
+
+%div
+  %ul.ace-thumbnails.gallery.clearfix
+    -@photos.each do |photo|
+      = render '/partials/admin/photo', photo:photo
+%br                    
+%div
+  %form#dropzone.dropzone.hide{:action => "/admin/photo?#{controller_name}_id=#{@item.id}", method:"post", enctype:"multipart/form-data" }
+    .fallback
+      %input{:multiple => "multiple", :name => "file", :type => "file"}
+
+- if action_name == 'show'
+  %h5.pink.hide
+- else
+  %h5.pink
+    %i.ace-icon.fa.fa-plus-square-o.green
+    %a.blue{"data-toggle" => "modal", :href => "#modal-form", :role => "button"} 增加图片
+
+#modal-form.modal{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"} &#215;
+        %h4.blue.bigger 图片对应的商品选项
+
+      .modal-body
+        = simple_form_for( @item, url:"/admin/photo.js", method:"post", wrapper: :horizontal_form, :html => { :class => "form-horizontal", :role => "form", id:"photo-form", enctype:"multipart/form-data"}) do |f| 
+          .row
+            .col-xs-12.col-sm-5
+              .space
+              %input{:type => "file", :accept =>"image/jpeg,image/x-png", name:"file"}
+            .col-xs-12.col-sm-7
+              .space-4
+              .form-group
+                %label{:for => "form-field-select-3"} 商品选项
+                %div
+                  %select.chosen-select{"data-placeholder" => "商品选项", name:"variant_id"}                    
+                    - @item.variants.each do |variant| 
+                      %option{:value => "#{variant.id}"}
+                        = variant.option_values.map(&:name) 
+                    
+        .modal-footer
+          %button.btn.btn-sm{"data-dismiss" => "modal"}
+            %i.ace-icon.fa.fa-times
+            取消
+          %button.btn.btn-sm.btn-primary.gallery-button-submit
+            %i.ace-icon.fa.fa-check
+            保存
+
+
+= javascript_include_tag "mydropzone"
+:javascript
+  $('#modal-form input[type=file]').ace_file_input({
+          style:'well',
+          btn_choose:'Drop files here or click to choose',
+          btn_change:null,
+          no_icon:'ace-icon fa fa-cloud-upload',
+          droppable:true,
+          thumbnail:'large'
+        })
+
+        $('#modal-form').on('shown.bs.modal', function () {
+          if(!ace.vars['touch']) {
+            $(this).find('.chosen-container').each(function(){
+              $(this).find('a:first-child').css('width' , '210px');
+              $(this).find('.chosen-drop').css('width' , '210px');
+              $(this).find('.chosen-search input').css('width' , '200px');
+            });
+          }
+        })
+

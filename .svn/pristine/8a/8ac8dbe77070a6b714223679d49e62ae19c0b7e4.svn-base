@@ -1,0 +1,22 @@
+class Coupon
+  include  BaseModel
+
+  field :name
+  field :value, type:Integer
+
+  field :expire_date, type:Date, :default => 7.days.from_now
+
+  field :is_used, default:false
+
+  belongs_to :user
+  belongs_to :order
+
+  def expired?
+    Time.now > expire_date
+  end
+
+  def use!
+    write_attribute :is_used, true
+  end
+
+end

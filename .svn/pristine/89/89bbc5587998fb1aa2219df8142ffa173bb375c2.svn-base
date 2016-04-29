@@ -1,0 +1,27 @@
+= simple_form_for( @item, url: "/admin/variant.js", method:"post", wrapper: :horizontal_form, :html => { :class => "form-horizontal opton-value", :role => "form" }) do |f| 
+  = f.input:price, input_html:{value:@item.product.price}
+  = f.input:sku
+  = f.input:stock
+  - @item.product.default_option_types.each_with_index do |tp, index|
+    = f.input :option_value_ids, collection: tp.option_values, label: tp.name, input_html:{name: "option_value_ids[]"}
+
+  = render '/partials/submit', f:f    
+
+  %input.hide{name:'variant[product_id]', value:"#{@item.product.id}"}
+
+:javascript
+  var form = $('form.opton-value');
+
+  $('form.opton-value #button-submit').on('click', function(e){
+    e.preventDefault();
+
+    uri = form.attr("action");
+    formData = form.serialize();
+    
+    $.post(uri, formData, function(data) {
+    });
+
+    bootbox.hideAll();
+    }
+
+   );

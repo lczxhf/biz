@@ -1,0 +1,20 @@
+class Lottery
+  include  BaseModel
+
+  belongs_to :lottery_order_item
+  belongs_to :prize_activity
+
+  field :is_winner, default:false
+
+  field :used, type:Boolean, default:false
+
+  field :seq, type:Integer
+    
+  field :random, type:Float, default: proc {rand}
+  
+  def value
+    self.prize_activity.prize.sale_unit
+  end
+
+
+end

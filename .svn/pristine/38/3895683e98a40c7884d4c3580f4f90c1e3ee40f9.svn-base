@@ -1,0 +1,29 @@
+class CartLineItem 
+  include  BaseModel
+  
+  field :num, type: Integer
+
+  field :session, type: String  # for non login user 
+  
+  belongs_to :user
+  belongs_to :variant
+
+  class << self
+    def get_cart user
+      items = CartLineItem.where(user:user)
+      items.map{ |c| {
+
+        variant_id: c.variant.id,
+        product_id: c.variant.product.id,
+        name: c.variant.product.name,
+        price: c.variant.price,
+        num: c.num,
+        photo: c.variant.product.get_photos[0].url,
+        option_types: c.variant.option_values.map(&:option_type).map(&:name),
+        option_values: c.variant.option_values.map(&:name)
+        }
+      }
+
+    end
+  end
+end

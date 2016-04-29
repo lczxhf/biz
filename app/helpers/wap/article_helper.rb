@@ -1,0 +1,2 @@
+module Wap::ArticleHelper
+end

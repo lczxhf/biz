@@ -1,0 +1,2 @@
+module Wap::HomeHelper
+end

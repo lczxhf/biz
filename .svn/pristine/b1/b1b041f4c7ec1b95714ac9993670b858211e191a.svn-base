@@ -1,0 +1,82 @@
+class LotteryOrder
+  include  BaseModel
+
+  belongs_to :user    
+
+  field :province
+  field :city
+  field :dist
+  field :street
+  field :zipcode
+
+  field :pay_state, type:Integer, default:0 
+  field_display :pay_state, {0=>"待付款", 1=>"已支付", 2 => "已退款" }  
+
+  
+  field :pay_time, type:Time
+  field :user_ip, type:String
+
+  field :ip2address, type:String  # by ip
+
+  has_many :lottery_order_items   # 可能包括多种奖品
+
+
+  def address= (address)
+    %w(consignee mobile province city street zipcode).each do |name|
+      write_attribute name, address.send(name.to_sym)
+    end
+  end
+
+
+  def can_pay?
+    return false if pay_state > 0
+
+    self.lottery_order_items.each do |item|
+      return false unless item.can_pay?
+    end
+
+    true
+  end
+
+
+
+  #用户支付完成
+  def on_pay_done(real_amount, trade_no)
+    self.pay_state = 1
+    self.real_amount = real_amount
+    self.trade_no = trade_no
+    pay_time = Time.now
+
+    if self.save!
+      lottery_count = 0
+      while lottery_count < num
+        lottery = prize_activity.lotteries.where(:random.gt => rand, used:false).first
+        if lottery
+          lottery_count += 1
+          lottery.lottery_order_id = self.id
+          lottery.used = true
+          lottery.save
+        end
+
+        return if prize_activity.lotteries.where(used: false).empty?  # over sell
+      end
+    end
+  end  
+
+
+  #订单创建时获取
+  def ip2address
+    url = "http://ip.taobao.com/service/getIpInfo.php?ip=#{self.user_ip}"
+    res = (JSON.parse RestClient.get url).to_hash
+
+    if res['code'] == 0
+     self.ip2address = "#{res['data']['region']}#{res['data']['city']}"
+     save
+    end   
+  end
+
+
+end
+
+
+

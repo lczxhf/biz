@@ -1,0 +1,38 @@
+
+%ul.footer_ul
+  %li.home
+    %a.link{:href => "/wap/home", class: [ controller_name == 'home'  && 'current']}
+      - if controller_name == 'home'
+        %img{src:'/assets/images/ico_foot_home.png'}
+      -else
+        %img{src:'/assets/images/ico_foot_home_gray.png'}
+      %p 首页
+
+  %li.category
+    %a.link{:href => "/wap/category", class: [ controller_name == 'category'  && 'current']}
+      - if controller_name == 'category'
+        %img{src:'/assets/images/ico_foot_category.png'}
+      - else
+        %img{src:'/assets/images/ico_foot_category_gray.png'}
+      %p 分类
+
+  %li.cart
+    %a.link{:href => "/wap/cart" , class: [ controller_name == 'cart'  && 'current']}
+      - if controller_name == 'cart'
+        %img{src:'/assets/images/ico_foot_cart.png'}        
+      - else  
+        %img{src:'/assets/images/ico_foot_cart_gray.png'} 
+      - if @current_user  
+        - lines = CartLineItem.get_cart @current_user
+        - if lines.length > 0
+          %span.cartnum_info="#{lines.length}"
+      %p 购物车
+
+  %li.user
+    %a.link{:href => "/wap/user", class: [ controller_name == 'user'  && 'current']}
+      - if controller_name == 'user' ||  controller_name == 'session'
+        %img{src:'/assets/images/ico_foot_user.png'}
+      - else
+        %img{src:'/assets/images/ico_foot_user_gray.png'}
+
+      %p 用户中心

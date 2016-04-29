@@ -1,0 +1,21 @@
+
+= stylesheet_link_tag "upload"
+= javascript_include_tag 'upload'
+= javascript_include_tag 'form_uploader'
+             
+.form-group
+  = f.label "图片", :class =>"control-label col-sm-3 no-padding-right"
+  .col-sm-9
+    .image-uploader-area
+      %ul{id:"screenshots_list"}
+        %li{id:"file-uploader", class:'screenshot'}
+   
+    - unless obj.new_record?
+      - pictures = obj.send(field)
+      - if pictures.is_a? Array
+        - value = pictures.map(&:id)
+        - value = value.join ','
+      - elsif pictures.present?
+        - value = pictures.id.to_s
+
+    %input{name:'pic_id', id:'upload-pics-input', type:'hidden', value:"#{value}"}

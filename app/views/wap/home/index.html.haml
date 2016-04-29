@@ -1,0 +1,81 @@
+.main.bgeee
+  .banner1
+    .swiper-container.swiper-container-horizontal
+      .swiper-wrapper
+        - @index_banners.each do |banner|        
+          .swiper-slide
+            %a{:href => "#{banner.link}"}
+              %img{:src => "#{banner.picture.url(:app)}", :title => "#{banner.name}"}
+
+      .swiper-pagination
+ 
+          
+  .menuNav
+    %ul.clearfix     
+      - @categories.each do |cat|
+        %li
+          %a{:href => "/wap/product?category=#{cat.id}"}
+            %img{:src => "#{cat.picture.url}"}
+            %p=cat.name
+          
+      %li
+        %a{:href => ""}
+          %img{:src => "/assets/images/ico_n4.png"}/
+          %p 车险
+
+      %li      
+        %a{:href => "/wap/misc/weizhang"}
+          %img{:src => "/assets/images/ico_n7.png"}/
+          %p 违章
+      %li
+        %a{:href => "/wap/article"}
+          %img{:src => "/assets/images/ico_n8.png"}/
+          %p 活动
+
+      %li
+        %a{:href => "/wap/prize_activity"}
+          %img{:src => "/assets/images/ico_n7.png"}/
+          %p 一元拍    
+
+  .index_catalogue.clearfix
+    - @categories.each do |cat|
+    - next if cat.products.empty?
+
+      .catalogue-1
+        .catalogue-T
+          %h3=cat.name
+        .catalogue-pro.clearfix
+          - cat.products.limit(4).each do |p|
+            .module_pro
+              %a.module_pro_img{:href => "/wap/product/#{p.id}", :target => "_blank"}
+                - if p.get_photos.first
+                  %img{:src => "#{p.get_photos.first.url_for(:thumb) }"}
+                - else
+                  %img{:src => "/assets/images/nopic.jpg"}
+
+              .pro_description
+                %p.pro_name=p.name                  
+                .price_con
+                  %span.products_prices.fl
+                    %font="￥#{p.price}"
+                  %span.market_prices.fl
+                    %font ￥  
+    
+  .clear
+
+  :javascript
+    $(function() {
+      $(".module_pro img").lazyload({
+        effect: "fadeIn"
+      });
+    });
+    
+    var tabsSwiper = new Swiper('.swiper-container', {
+      pagination: '.swiper-pagination',
+      loop: true,
+    });
+
+
+
+
+

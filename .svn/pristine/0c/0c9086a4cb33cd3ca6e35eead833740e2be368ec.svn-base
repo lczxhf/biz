@@ -1,0 +1,41 @@
+class Wap::LotteryOrderController < Wap::ForceLoginController
+
+  layout 'wap_no_bottom'
+
+  def index
+    flash.now[:referer] = '/wap/user'
+    @title = "夺宝记录"
+    flash.now[:t] = params[:t]
+  end
+
+  def show
+    @order = LotteryOrder.find_by_id params[:id]
+    @title = @order.prize_activity.name
+  end
+
+  def new
+    @title = "确认订单"
+    flash.now[:referer] = '/wap/cart'
+
+    @temp_order = @current_user.temp_order
+    @default_address = @temp_order.user_address
+
+    @default_address ||= @current_user.user_addresses.where(is_default:true).first
+    @default_address ||= @current_user.user_addresses.first
+  end
+
+  def create
+    items =  params[:lottery_order].to_hash
+    items.each do |item|
+      
+    end
+
+    render json:{result_code:1}
+  end
+
+  def pay
+    @title = "支付订单"
+    @order = LotteryOrder.find_by_id params[:id]
+  end
+
+end

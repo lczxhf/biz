@@ -1,0 +1,13 @@
+.page-header
+  %h1
+    = I18n.t "attributes.#{controller_name}", default:controller_name
+    %small
+      %i.ace-icon.fa.fa-angle-double-right
+      查看
+
+    %small.col-9.pull-right
+      %a{href:"#{ace_path @item, :edit}"}
+        %span.green
+          %i.ace-icon.fa.fa-pencil-square-o 
+            编辑
+.clearfix  

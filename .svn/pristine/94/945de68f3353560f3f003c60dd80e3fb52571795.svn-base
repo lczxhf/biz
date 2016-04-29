@@ -1,0 +1,22 @@
+= simple_form_for( @item, url: "/admin/option_value.js", method:"post", wrapper: :horizontal_form, :html => { :class => "form-horizontal opton-value", :role => "form" }) do |f| 
+  = f.input:name
+  = render '/partials/submit', f:f    
+
+
+:javascript
+  var form = $('form.opton-value');
+
+  $('form.opton-value #button-submit').on('click', function(e){
+    e.preventDefault();
+
+    uri = form.attr("action");
+    formData = form.serialize();
+    
+    $.post(uri, formData, function(data) {
+      console.log(data);
+    });
+
+    bootbox.hideAll();
+    }
+
+   );

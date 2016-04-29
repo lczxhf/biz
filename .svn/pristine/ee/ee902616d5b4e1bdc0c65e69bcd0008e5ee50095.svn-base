@@ -1,0 +1,49 @@
+!!!
+%html{lang: "zh-CN"}
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
+    %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}
+    %meta{:charset => "utf-8"}
+    %title 灵墨-Mall
+    %meta{:content => "", :name => "description"}
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0", :name => "viewport"}       
+    %meta{:content => "email=no", :name => "format-detection"}
+
+    %meta{:content => "yes", :name => "apple-touch-fullscreen"}
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}
+    %meta{:content => "black", :name => "apple-mobile-web-app-status-bar-style"}
+    %meta{:content => "black", :name => "apple-mobile-app-status-bar-style"}
+    %meta{:content => "email=no", :name => "format-detection"}
+
+
+    = stylesheet_link_tag "wap"
+    = javascript_include_tag 'wap'
+    = csrf_meta_tag      
+
+  %body
+    %header.header
+      .back
+        %a{:href => "javascript:goback();"}
+          
+          %img{src:'/assets/images/ico_1.png'} 
+      %h2#title 
+        = @title
+        
+      .nav_index
+        %a{:href => ""}
+          %img{src:'/assets/images/ico_2.png'} 
+
+      .nav_menu
+        = render "partials/wap/tab_bottom"
+        
+    .main
+      = yield
+
+
+    %footer.footer
+      = render "partials/wap/tab_bottom"
+
+- if flash[:referer]        
+  :javascript
+    var referer = "#{flash[:referer]}"
+

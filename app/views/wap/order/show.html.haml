@@ -1,0 +1,97 @@
+.addr
+  %h3
+    %span
+      订单号：
+      %b.org=@order.sn
+    = succeed "\u{8ba2}\u{5355}\u{72b6}\u{6001}\u{ff1a}" do
+      %img{:src => "/assets/images/ico_20.png"}/
+    %b.org=@order.state_name
+
+  %a{:href => ""}
+    %h3 感谢您在***购物，欢迎您再次光临***
+  %ul
+    %li
+      %strong="收货人：#{@order.consignee}"
+      %span=@order.mobile
+      %p=@order.readable_address
+%ul.zhifu
+  %li
+    %strong 支付方式
+    %span 在线支付
+  %li
+    %strong 配送方式
+    %span
+      %a{:href => ""}=@order.get_display :shipping_type
+
+.piao.hide
+  %h3 发票信息
+  %p
+    发票抬头：納尼
+    = succeed "\u{53d1}\u{7968}\u{5185}\u{5bb9}\u{ff1a}abcdefghijklmn" do
+      %br/
+.piao
+  %h3 订单备注
+  %p=@order.remark
+.dan
+  %h3 商品清单
+  %ul
+    -@order.order_products.each do |op|
+      %li
+        %em
+          %a{:href => "/wap/product/#{op.variant.product.id}"}
+            %img{:src => "#{op.photo.url}"}
+        %p
+          %a{:href => ""}
+            = op.name
+          %span=" 规格：#{op.variant.readable_specs}"
+          %strong
+            %b.org>=op.price
+            ="x #{op.num}"
+.money
+  %ul
+    %li
+      %span=@order.ori_amount
+      %strong 商品总额
+    %li
+      %span>=@order.shipping_fee
+      +运费
+    %li
+      %span>=@order.cash_discount
+      \- 订单促销
+    %li
+      %span>=@order.reward_score
+      获得积分
+  %p
+    %font>
+      实付款：
+      %b.org=@order.cash_amount
+    = "下单时间：#{@order.c_at.strftime("%y-%m-%d %H:%M:%S")}"
+
+.btnD
+  - if @order.state == 99
+    %a{:href => "#", :style => "color:#D8D8D8"} 已取消
+
+  - if @order.can_cancel?
+    %a{:href => "javascript:;", :onclick => '_cancel("' + @order.id.to_s + '")'} 取消订单
+
+  - if @order.state == 1 and @order.shipping_state == 0 
+    %a{:href => "#", :style => "color:#D8D8D8"} 即将发货
+
+  - if @order.pay_state == 0 and @order.state == 0
+    %a{:href => "/wap/order/#{@order.id}/pay"} 立即付款
+
+  - if @order.state == 4
+    %a.hover{:href => "/wap/product/"} 再次购买
+
+  - if @order.shipping_state == 1
+    %a{:href => ""} 查看物流
+
+  - if @order.shipping_state == 1
+    %a{:href => "javascript:;", :onclick => '_confirm("' + @order.id.to_s + '")'} 确认收货
+
+  / %a.hover{:href => ""} 再次购买
+  / %a.hover{:href => ""} 评价晒单
+:css
+  body {
+    padding-bottom: 48px!important;
+  }

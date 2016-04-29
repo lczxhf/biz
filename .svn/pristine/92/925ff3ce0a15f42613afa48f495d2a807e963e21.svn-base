@@ -1,0 +1,13 @@
+<ul>
+					<%activity.get_all_order(num ||= true).each do |order_item|%>
+					<li>
+						<div class="pdd">
+							<div class="fl award-detail-t"><img src="<%=order_item.lottery_order.user.avatar.thumb.url%>" /></div>
+							<div class="fr award-detail-th">
+								<p class="txt-blue"><%=order_item.lottery_order.user.name%><span>(<%="#{order_item.lottery_order.ip2address}  IP:#{order_item.lottery_order.user_ip}"%></span></p>
+								<p>参与了<em><%=order_item.part%></em>人次<time><%=order_item.c_at.strftime("%Y-%m-%d %H:%M:%S")%></time></p>
+							</div>
+						</div>
+					</li>
+					<%end%>
+</ul>

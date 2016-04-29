@@ -1,0 +1,8 @@
+.show-row    
+  %span.col-sm-2.name
+    = I18n.t "attributes.#{field}", default:"#{field}"          
+  %span.col-sm-10.value        
+    - unless (defined? value)
+      = item.send field 
+    - else  
+      = value

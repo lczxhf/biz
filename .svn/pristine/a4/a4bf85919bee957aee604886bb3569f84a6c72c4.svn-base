@@ -1,0 +1,29 @@
+= render '/partials/edit_header'
+
+.tabbable
+  %ul.nav.nav-tabs.padding-12.tab-color-blue.background-blue
+    %li
+      %a{:href => "?r=basic"} 基本信息
+
+    %li
+      %a{:href => "?r=detail"} 详情
+    
+    %li
+      %a{:href => "?r=map"} 地图
+    %li.active
+      %a{:href => "?r=gallery"} 图册          
+
+
+  .tab-content
+    #gallery.tab-pane.active
+      .alert.alert-info.hide
+        %i.ace-icon.fa.fa-hand-o-right
+          notes
+        %button.close{"data-dismiss" => "alert"}
+          %i.ace-icon.fa.fa-times
+
+      -@action_url = "/admin/photo?shop_id="+@item.id.to_s
+      -@photos = @item.photos
+      = render '/partials/shop_photos'
+
+

@@ -1,0 +1,9 @@
+- if @item.errors.blank?
+  :plain
+    // var selector = 'select.chosen-select ';
+    // var opt_html = '<option value=' + '"' + "#{@item.id}" + ' selected= + '"' + 'true' + '">' + "#{@item.name}"  + '"' +'</option>';
+
+    // $(selector).append(opt_html);
+    
+    location.reload();
+    

@@ -1,0 +1,33 @@
+=javascript_include_tag "wap/#{controller_name}"
+.pd0
+  .pay-order
+    %ul
+      -@order.lottery_order_items.each do |item|
+        %li
+          .pay-order-l
+            =item.prize_activity.prize.name
+          %span
+            %em
+              =item.part
+            人次
+  .goods-together
+    商品合计:
+    %span
+      =@order.total_price
+      夺金币
+%ul#pays.fuku
+  %li{:pay_code => ""}
+    %em.hover
+      %img{:src => "/assets/images/small_ws_wap.png"}
+    .zhifu2
+      %p
+        %strong 支付宝手机支付
+        %font.item-name 支付宝
+.goPay{target:"#{@order.id}",onclick: "#{ @order.can_pay? ? 'pay(this)' : 'cant_pay()'}"}
+  %p
+    去支付
+
+:javascript
+  if("#{flash[:pay_state]}" != ""){
+  	alert("#{flash[:pay_state]}")
+  }

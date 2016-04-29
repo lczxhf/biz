@@ -1,0 +1,43 @@
+.address
+  #waterfall-content.swiper-slide
+    %ul#container
+      - @current_user.user_addresses.each do |address|
+        %li
+          %strong= address.consignee
+
+          - if address.is_default  
+            %font 默认
+
+          - else  
+            %a{:onclick => "setDefault('#{address.id}')"}
+              %font.default_address_btn 设置为默认
+
+          %a{:href => "#{edit_wap_user_address_path address}"}
+            %span= address.mobile
+
+            %p= address.readable_address
+            %em
+              %img{:src => "/assets/images/ico_15.png"}
+
+    .mar15
+      %a{:href => "#{new_wap_user_address_path}"}
+        %input.btnBlue.mt10{:type => "button", :value => "添加新收货地址"}
+
+:javascript
+  function setDefault(id){
+    $.ajax({
+      type: 'PUT',
+      url: '/api/user_address/'+id, 
+      data:{
+        is_default: true,
+        id:id
+      }, 
+      success: function(data) {
+        console.log(data);
+        location.href = '/wap/user_address';
+      },
+      error: function(data){
+        hd_alert(data.error_message);
+      }
+    });
+  }

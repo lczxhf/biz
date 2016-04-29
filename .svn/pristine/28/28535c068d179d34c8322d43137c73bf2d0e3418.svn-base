@@ -1,0 +1,2 @@
+module Wap::SessionHelper
+end

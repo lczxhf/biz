@@ -1,0 +1,18 @@
+.kd.clearfix
+  %em
+    %img{:src => "#{@order.photos(:thumb).first}"}
+  %p
+    %strong> 运单号
+    ="#{@order.express.name}: #{@order.express_sn}"
+.flow
+  %h3 订单跟踪
+  
+
+  %ul#kuaidi
+    - if @tracks["status"] != '200'
+      %li 
+        %p=@tracks["message"]
+
+    - @tracks["data"].each do |item|
+      %li{"data-type" => "track"}
+        %span="<#{item['time']}> #{item['context']}"

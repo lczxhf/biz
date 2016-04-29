@@ -1,0 +1,13 @@
+class Wap::PrizeActivityController < Wap::ApplicationController
+  layout 'wap_no_bottom'
+
+  def index
+    @title = "一元拍"
+    @items = PrizeActivity.all       
+  end
+
+  def show
+    @item = PrizeActivity.find_by_id params[:id]
+    @title = @item.name    
+  end
+end

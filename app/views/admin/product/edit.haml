@@ -1,0 +1,130 @@
+= render '/partials/edit_header'
+
+.tabbable
+  %ul#myTab4.nav.nav-tabs.padding-12.tab-color-blue.background-blue
+    %li.basic.active.tab-header
+      %a{:href => "#basic", "data-toggle"=>"tab"} 基本信息
+
+    %li.option.tab-header
+      %a{:href => "#option","data-toggle"=>"tab"} 购买选项
+
+    %li.prop.tab-header
+      %a{:href => "#prop", "data-toggle"=>"tab"} 属性
+
+    %li.detail.tab-header
+      %a{:href => "#detail","data-toggle"=>"tab"} 详情
+
+    %li.gallery.tab-header
+      %a{:href => "#gallery","data-toggle"=>"tab"} 图册
+
+  
+  .tab-content
+    #basic.tab-pane.in.active
+      = simple_form_for( @item, url:"#{ace_path  @item}", method:"put", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form", :role => "form", id:"product-form"}) do |f| 
+        = f.input:name, required:true
+        = f.input:brief
+        = f.input:state, collection: @item.class.get_field_display(:state)
+        = f.input:price, as: :float ,required:true
+
+        = render '/partials/switch', field: :is_hot, default: @item.is_hot, hint:"如果yes, 出现在首页商品区列表中", f:f
+
+        = f.input:score, as: :integer, hint: "用户购买商品获得的积分" #collection: (0..100).map{|x|x*5}
+
+        = f.input :has_invoice, label: "发票" ,as: :select, hint: "如果yes,提供发票"        
+        = f.input :newprepay, label: "7天无理由退货" ,as: :select, hint: "如果yes,支持7天无理由退货"
+
+        .form-group
+          = f.label :category, :class =>"control-label col-sm-3 no-padding-right"
+          .col-sm-9      
+            #select-children.col-xs-10.col-sm-5      
+              -unless @item.new_record?
+                -@data[:default].each do |item|
+                  %select.cat-select.select-items{level:"#{item[:level]}", id:"select-level-#{item[:level]}"}
+                    %option{value:"#{item.id}"}
+                      =item.name
+                    -item.brothers.each do |b|
+                      %option{value:"#{b.id}"}
+                        =b.name
+              -else
+                %select#select-level-0.select-items{level:"0"}
+                  -@data[:items].each do |item|
+                    %option{value:"#{item.id}"}
+                      =item.name
+
+        = f.input :has_assemble_fee, label: "是否需要安装" ,as: :select, hint: "如果yes,线下门店可以选择支持该产品安装服务" 
+        = f.input :assemble_fee, label: "安装费" , hint: "预计最高安装费，用于门店参考"   
+
+        //= f.input :option_type_prototype_id, collection: OptionTypePrototype.all, prompt: "商品购买选项模板"
+        = f.input :property_type_prototype_id, collection: PropertyTypePrototype.all, prompt: "选择一个属性模板"
+
+
+        .form-group
+          = f.label "选项名称", :class =>"control-label col-sm-3 no-padding-right"
+
+          .col-sm-5.col-xs-12
+            %select.chosen-select.tag-input-style.col-xs-12{"data-placeholder" => "选择选项", :multiple => "multiple", name:"product[default_option_type_ids][]", form:"product-form"}
+              - OptionType.each do |option|
+
+                -if @item.option_types.include? option          
+                  %option{:value => "#{option.id}", :selected => "true"} 
+                    = option.name
+                -else
+                  %option{:value => "#{option.id}"} 
+                    = option.name
+
+        .form-group
+          = f.label "运费模板", :class =>"control-label col-sm-3 no-padding-right"
+
+          .col-sm-5.col-xs-12
+            %select.chosen-select.tag-input-style.col-xs-12{"data-placeholder" => "选择选项", :multiple => "multiple", name:"product[shipping_rule_ids][]", form:"product-form"}
+              - ShippingRule.each do |rule|
+
+                -if @item.shipping_rules.include? rule          
+                  %option{:value => "#{rule.id}", :selected => "true"} 
+                    = rule.name
+                -else
+                  %option{:value => "#{rule.id}"} 
+                    = rule.name
+
+        = render '/partials/submit', f:f                      
+
+    #option.tab-pane.in      
+      =simple_form_for( @item, url:"#{ace_path @item}", method:"put", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form option-form"}) do |f| 
+        = link_to '新增可选值', new_admin_variant_path(product_id: @item.id), remote: true
+
+        - @item.variants.desc(:u_at).each do |variant|  
+          = render "/partials/admin/variant" , variant:variant        
+        = render '/partials/submit', f:f  
+
+    #prop.tab-pane.in      
+      = simple_form_for( @item, url:"#{ace_path  @item}", method:"patch", wrapper: :horizontal_form, :html => { :class => "form-horizontal", :role => "form", id:"product-options"}) do |f| 
+        - @item.product_property_types.each_with_index do |prop,index|          
+          .form-group
+            %label.control-label.col-sm-3.no-padding-right{:html => {for:"prop-options"}} 
+              = prop.name
+
+            .col-sm-9
+              %select#prop-options.col-sm-5{name: "product_property_types[#{prop.id}]"}
+                - prop.option_values.split(',').each do |v|
+                  %option{:selected => "#{prop.value == v}" }
+                    = v                            
+
+        = render '/partials/submit', f:f    
+
+    #detail.tab-pane        
+
+      = simple_form_for( @item, url:"#{ace_path  @item}",  method:"put") do |f|
+        = f.input :content, :as => :ckeditor, :input_html => { :ckeditor => {:toolbar => 'Full'} }, label: false
+        = render '/partials/submit', f:f            
+
+    #gallery.tab-pane.in
+      .alert.alert-info.hide
+        %i.ace-icon.fa.fa-hand-o-right
+          notes
+        %button.close{"data-dismiss" => "alert"}
+          %i.ace-icon.fa.fa-times
+
+      -@photos = @item.get_photos
+      = render '/partials/gallery'
+
+= javascript_include_tag 'ace_chosen'

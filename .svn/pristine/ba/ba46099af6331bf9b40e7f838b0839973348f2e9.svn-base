@@ -1,0 +1,14 @@
+.login
+  %ul
+    %li
+      %input.input_3{:maxlength => "11", :name => "mobile", :placeholder => "请输入手机号码", :type => "text"}    
+    %li
+      %input.input_3{:maxlength => "4", :name => "code", :placeholder => "请输入您收到的验证码", :style => "width:61%;", :type => "text"}
+      %span.msgs#login_sms_get 获取验证码
+
+  .mar15
+    %input.btnBlue#code_login_btn{:type => "button", :value => "登录"}
+    %a{:href => "/wap/user/new"}
+      %input.btnPink.mt10{:type => "button", :value => "还没有账号？注册"}
+
+  = javascript_include_tag 'wap/user'

@@ -1,0 +1,311 @@
+#sidebar.sidebar.responsive
+  :javascript
+    try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+
+  %ul.nav.nav-list
+    %li.nav-container.open
+      %a{:href => "/admin/dash_board"}
+        %i.menu-icon.fa.fa-home
+        %span.menu-text 首页
+      %b.arrow
+
+    
+    %li.nav-index_banner.nav-container.nav-article
+      %a.dropdown-toggle{:href => "/admin/index_banner"}
+        %i.menu-icon.fa.fa-plane
+        %span.menu-text
+          内容管理
+        %b.arrow.fa.fa-angle-down
+      %b.arrow
+      %ul.submenu
+        %li.nav-index_banner-index
+          %a{:href => "/admin/index_banner"}
+            %i.menu-icon.fa.fa-caret-right
+            轮播图
+
+          %b.arrow
+
+        %li.nav-article-index
+          %a{:href => "/admin/article"}
+            %i.menu-icon.fa.fa-caret-right
+            活动文章
+            %b.arrow
+
+    %li.nav-container.nav-car_brand.nav-pay_config.nav-express.nav-shipping_rule
+      %a.dropdown-toggle{:href => "/admin/pay_config"}
+        %i.menu-icon.fa.fa-cog
+        %span.menu-text 设置
+        %b.arrow.fa.fa-angle-down
+      %b.arrow
+
+      %ul.submenu
+        %li.nav-pay_config-index
+          %a{:href => "/admin/pay_config"}
+            %i.menu-icon.fa.fa-caret-right
+            支付接口                  
+          %b.arrow      
+
+        %li.nav-express-index
+          %a{:href => "/admin/express"}
+            %i.menu-icon.fa.fa-caret-right
+            快递
+          %b.arrow     
+
+        %li.nav-shipping_rule-index
+          %a{:href => "/admin/shipping_rule"}
+            %i.menu-icon.fa.fa-caret-right
+            运费模板
+          %b.arrow                  
+
+        %li.nav-car_brand-index.hide
+          %a{:href => "/admin/car_brand"}
+            %i.menu-icon.fa.fa-caret-right
+            汽车品牌
+          %b.arrow                             
+
+    %li.nav-container.nav-category
+      %a.dropdown-toggle{:href => "/admin/category"}
+        %i.menu-icon.fa.fa-flag-o
+        %span.menu-text
+          分类
+        %b.arrow.fa.fa-angle-down
+      %b.arrow
+      %ul.submenu
+
+        %li.nav-category-index
+          %a{:href => "/admin/category"}
+            %i.menu-icon.fa.fa-caret-right
+            全部分类
+          %b.arrow
+        
+        %li.nav-category-new
+          %a{:href => "/admin/category/new"}
+            %i.menu-icon.fa.fa-caret-right
+            新建分类
+          %b.arrow
+
+    %li.nav-container.nav-product.nav-option_type.nav-property_type.nav-property_type_prototype
+      %a.dropdown-toggle{:href => "/admin/product"}
+        %i.menu-icon.fa.fa-yelp
+        %span.menu-text
+          商品
+        %b.arrow.fa.fa-angle-down
+      %b.arrow
+      %ul.submenu
+        %li.nav-product-index
+          %a{:href => "/admin/product"}
+            %i.menu-icon.fa.fa-caret-right
+            商品列表
+          %b.arrow
+        %li.nav-product-new
+          %a{:href => "/admin/product/new"}
+            %i.menu-icon.fa.fa-caret-right                  
+            新建商品
+          %b.arrow
+
+        %li.nav-option_type-index
+          %a{:href => "/admin/option_type"}
+            %i.menu-icon.fa.fa-caret-right
+            规格列表
+          %b.arrow
+
+        %li.nav-property_type-index
+          %a{:href => "/admin/property_type"}
+            %i.menu-icon.fa.fa-caret-right
+            属性列表
+
+        %li.nav-property_type_prototype-index
+          %a{:href => "/admin/property_type_prototype"}
+            %i.menu-icon.fa.fa-caret-right
+            属性模板
+          %b.arrow
+
+    %li.nav-container.nav-timed_promotion.nav-promotion_rule
+      %a.dropdown-toggle{:href => "/admin/timed_promotion"}
+        %i.menu-icon.fa.fa-gift
+        %span.menu-text
+          促销
+        %b.arrow.fa.fa-angle-down
+      %b.arrow
+      %ul.submenu
+        %li.nav-timed_promotion-index
+          %a{:href => "/admin/timed_promotion"}
+            %i.menu-icon.fa.fa-caret-right
+            限时抢购
+          %b.arrow
+      %ul.submenu
+        %li.nav-promotion_rule-index
+          %a{:href => "/admin/promotion_rule"}
+            %i.menu-icon.fa.fa-caret-right
+            商品促销
+          %b.arrow
+
+    %li.nav-container.nav-prize.nav-prize_activity
+      %a.dropdown-toggle{:href => "/admin/prize"}
+        %i.menu-icon.fa.fa-gift
+        %span.menu-text
+          一元拍
+        %b.arrow.fa.fa-angle-down
+      %b.arrow
+      %ul.submenu
+        %li.nav-timed_promotion-index
+          %a{:href => "/admin/prize"}
+            %i.menu-icon.fa.fa-caret-right
+            奖品
+          %b.arrow
+      %ul.submenu
+        %li.nav-promotion_rule-index
+          %a{:href => "/admin/prize_activity"}
+            %i.menu-icon.fa.fa-caret-right
+            活动
+          %b.arrow
+
+    %li.nav-container.nav-order
+      %a.dropdown-toggle{:href => "/admin/order"}
+        %i.menu-icon.fa.fa-star-o
+        %span.menu-text 订单
+        %b.arrow.fa.fa-angle-down
+      %b.arrow
+      %ul.submenu
+        %li.nav-order-index
+          %a{:href => "/admin/order"}
+            %i.menu-icon.fa.fa-caret-right
+            订单列表
+          %b.arrow
+
+    %li.nav-container.nav-appointment
+      %a.dropdown-toggle{:href => "/admin/appointment"}
+        %i.menu-icon.fa.fa-star-o
+        %span.menu-text 预约
+        %b.arrow.fa.fa-angle-down
+      %b.arrow
+      %ul.submenu
+        %li.nav-order-index
+          %a{:href => "/admin/appointment"}
+            %i.menu-icon.fa.fa-caret-right
+            预约列表
+          %b.arrow      
+
+    %li.nav-container.nav-sales_man
+      %a.dropdown-toggle{:href => "/admin/sales_man"}
+        %i.menu-icon.fa.fa-star-o
+        %span.menu-text 销售顾问
+        %b.arrow.fa.fa-angle-down
+      %b.arrow
+      %ul.submenu
+        %li.nav-order-index
+          %a{:href => "/admin/sales_man"}
+            %i.menu-icon.fa.fa-caret-right
+            销售顾问
+          %b.arrow       
+
+    %li.nav-container.nav-user.nav-admin_user
+      %a.dropdown-toggle{:href => "/admin/user"}
+        %i.menu-icon.fa.fa-user
+        %span.menu-text 用户
+        %b.arrow.fa.fa-angle-down
+      %b.arrow
+      %ul.submenu
+
+        %li.nav-user-index
+          %a{:href => "/admin/user"}
+            %i.menu-icon.fa.fa-caret-right
+            用户
+          %b.arrow
+        
+        %li.nav-admin_user-index
+          %a{:href => "/admin/admin_user"}
+            %i.menu-icon.fa.fa-caret-right
+            管理员
+          %b.arrow
+
+    %li.nav-container.nav-shop
+      %a.dropdown-toggle{:href => "/admin/shop"}
+        %i.menu-icon.fa.fa-lemon-o
+        %span.menu-text 门店
+        %b.arrow.fa.fa-angle-down
+      %b.arrow
+      %ul.submenu
+        %li.nav-shop-index
+          %a{:href => "/admin/shop"}
+            %i.menu-icon.fa.fa-caret-right
+            门店列表
+          %b.arrow
+
+        %li
+          %a{:href => "/admin/shop/new"}
+            %i.menu-icon.fa.fa-caret-right
+            新建门店
+          %b.arrow    
+
+      - if @current_shop
+        %li
+          %a{:href => "/admin/shop/#{@current_shop.id.to_s}"}
+            %i.menu-icon.fa.fa-caret-right
+            基本信息
+          %b.arrow
+
+    %li.nav-container.nav-stock.hide
+      %a.dropdown-toggle{:href => "#"}
+        %i.menu-icon.fa.fa-laptop
+        %span.menu-text 库存
+        %b.arrow.fa.fa-angle-down
+      %b.arrow
+      %ul.submenu
+
+        %li
+          %a{:href => "/admin/stock"}
+            %i.menu-icon.fa.fa-caret-right
+            库存
+          %b.arrow  
+
+    %li.nav-container.nav-message.nav-notice.nav-order_product_comment
+      %a.dropdown-toggle{:href => "/admin/notice"}
+        %i.menu-icon.fa.fa-bullhorn
+        %span.menu-text 信息中心
+        %b.arrow.fa.fa-angle-down
+      %b.arrow
+      %ul.submenu
+        %li.nav-message-index
+          %a{:href => "/admin/message"}
+            %i.menu-icon.fa.fa-caret-right
+            推送消息
+          %b.arrow      
+
+        %li.nav-order_product_comment-index
+          %a{:href => "/admin/order_product_comment"}
+            %i.menu-icon.fa.fa-caret-right
+            商品评价
+          %b.arrow   
+
+        %li.nav-notice-index
+          %a{:href => "/admin/notice"}
+            %i.menu-icon.fa.fa-caret-right
+            系统通知 
+
+
+    %li.nav-container.nav-validate_code
+      %a.dropdown-toggle{:href => "/admin/validate_code"}
+        %i.menu-icon.fa.fa-tag
+        %span.menu-text 其他
+        %b.arrow.fa.fa-angle-down
+      %b.arrow
+      %ul.submenu
+        %li.nav-validate_code
+          %a{:href => "/admin/validate_code"}
+            %i.menu-icon.fa.fa-caret-right
+            验证码
+          %b.arrow
+
+
+  / /.nav-list
+  #sidebar-collapse.sidebar-toggle.sidebar-collapse
+    %i.ace-icon.fa.fa-angle-double-left{"data-icon1" => "ace-icon fa fa-angle-double-left", "data-icon2" => "ace-icon fa fa-angle-double-right"}
+
+  :javascript
+    try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+    
+    $("li.nav-container").removeClass("open");
+    $(".nav-" + "#{controller_name}").addClass("open");
+    $(".nav-" + "#{controller_name}-" + "#{action_name}").addClass("open");  
+

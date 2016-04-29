@@ -1,0 +1,101 @@
+.banner.goods_detail_banner
+  .swiper-container.swiper1
+    .swiper-wrapper
+      - @item.get_photos.each do |photo|
+        .swiper-slide
+          %img{:src => "#{photo.url_for :app}"}
+
+    .swiper-pagination
+
+
+.phtt{"data-id" => "#{@item.id}"}
+  %strong=@item.name
+  %p#data_shop_price.org
+    %span#sale_price.org1=@item.price
+    %span.org2 ￥0.00
+
+
+- if @item.have_options?
+  .color
+    %ul#goods_specs
+      - @item.option_types.each_with_index do |spec, index|
+        %li.goods_specs_col
+          %strong=spec.name
+          %p
+            - spec.option_values.asc(:name).each do |value|
+              %a{"data-id" => "#{value.id}", "data-name" => "#{value.name}", :href => "javascript:;"}
+                = value.name
+
+%dl.dldt2
+  %dt.relR
+    %strong
+      %span 商品详情
+    %strong{"data-load" => "comment"}
+      %span 商品评价
+    %strong{"data-load" => "consult"}
+      %span 预约咨询
+  %dd
+    .ph 
+      =sanitize @item.content if @item.content
+  %dd
+    .zixun.clearfix
+      %p{:style => "color:#ff4400;text-indent:4px;"} 只有购买过该商品的用户才能评论
+    #comment_result.ping
+      %ul
+    .zixun.clearfix.zixun_moreClick
+      %p.more{"data-load" => "comment"} 点击查看更多
+  %dd
+    .zixun.clearfix
+      %p{:style => "color:#ff4400;text-indent:4px;"} 对商品有任何疑问可在线咨询
+      %a{:href => "/wap/appointment/new?product_id=#{@item.id}"} 我要预约
+    #consult_result.ping
+      %ul
+    .zixun.clearfix.zixun_moreClick
+      %p.more{"data-load" => "consult"} 点击查看更多
+
+
+.shopa.clearfix
+  #favorite.shouc.fl
+    %a{:href => "javascript:;"}
+      %em
+      %span.textt 点击收藏
+  .che.fl
+    %a{:href => "/wap/cart"}
+      %b#cart_total{:style => "display: none;"} 0
+      %img{:src => "/assets/images/ico_13.png"}
+      %span.textt 购物车
+  .adds.fr
+    - if @item.have_options?
+      %a#btn_cart.disabled{:href => "javascript:;"} 请选择规格
+
+    -else  
+      %a#btn_cart.hover{:href => "javascript:;"} 加入购物车
+    
+
+:javascript
+    var swiper1 = new Swiper('.swiper1', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        loop: true,
+    });
+    var swiperb = new Swiper('.swiperb');
+
+    $(function() {
+      var elm = $('.relR');
+      var startPos = $(elm).offset().top - 40;
+      $.event.add(window, "scroll", function() {
+        var p = $(window).scrollTop();
+        $(elm).css('position', ((p) > startPos) ? 'fixed' : 'static');
+        $(elm).css('top', ((p) > startPos) ? '40px' : '');
+      });
+    })
+
+=javascript_include_tag "wap/#{controller_name}"
+
+
+
+
+
+
+
+

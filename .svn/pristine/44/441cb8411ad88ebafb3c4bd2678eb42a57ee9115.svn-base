@@ -1,0 +1,53 @@
+= render "partials/index_header"
+:css
+  .toolbar-new{display:none;}
+
+%table#simple-table.table.table-striped.table-bordered.table-hover
+  %thead
+    %tr      
+      %th 支付方式
+      %th 描述      
+      %th
+        %i.ace-icon.fa.fa-clock-o.bigger-110.hidden-480
+        更新日期
+      %th.hidden-480 状态
+      %th 操作
+  %tbody
+    %tr      
+      %td
+        %a{:href => "#"}
+        =@wxpay.name
+      %td
+        = @wxpay.desc      
+      %td
+        = @wxpay.updated_at
+
+      %td
+        - unless @wxpay.is_open
+          %span.label.label-sm.label-warning 未启用
+        - else
+          %span.label.label-sm.label-success 启用
+      %td
+        .btn-group          
+          %a.btn.btn-xs.btn-info{href:"#{ace_path_edit @wxpay}"}
+            %i.ace-icon.fa.fa-pencil.bigger-120    
+
+    %tr
+      %td
+        %a{:href => "#"}
+        =@alipay.name
+      %td
+        = @alipay.desc      
+      %td
+        = @alipay.updated_at
+
+      %td
+        - unless @alipay.is_open
+          %span.label.label-sm.label-warning 未启用
+        - else
+          %span.label.label-sm.label-success 启用
+      %td
+        .btn-group          
+          %a.btn.btn-xs.btn-info{href:"#{ace_path_edit @alipay}"}
+            %i.ace-icon.fa.fa-pencil.bigger-120 
+

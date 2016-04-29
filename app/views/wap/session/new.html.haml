@@ -1,0 +1,27 @@
+.login
+  %ul
+    %li
+      %input.input_3{:name => "mobile", :placeholder => "手机号", :type => "text"}/
+    %li
+      %input.input_3{:name => "password", :placeholder => "密码", :type => "password"}/
+  .mar15
+    %input.btnBlue#login_btn{:type => "button", :value => "登录"}
+    %a{:href => "/wap/user/new"}
+      %input.btnPink.mt10{:type => "button", :value => "还没有账号？注册"}
+
+    .jiz.clearfix
+      %p
+        %label
+          %input.jizdenglu_check{:name => "cookie", :type => "checkbox", :value => "1"}/
+          记住登录
+      %span
+        %a{:href => "/wap/session/code_login"} 忘记密码？
+
+
+  .other-login
+
+  =javascript_include_tag 'wap/session'
+
+- if flash[:notice]
+  :javascript
+    hd_alert("#{flash[:notice]}");

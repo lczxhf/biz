@@ -1,0 +1,54 @@
+
+.main  
+  %dl.dldt
+    %dt
+      %strong
+        %a.tab_sort{:href => "javascript:void(0)", :key => "u_at", :sort => "desc"} 综合
+      %strong
+        %a.tab_sort{:href => "javascript:void(0)", :key => "sell_count", :sort => "asc"} 销量
+      %strong
+        %a.tab_sort{:href => "javascript:void(0)", :key => "price", :sort => "asc"} 价格
+      %strong
+        %a.tab_sort{:href => "javascript:void(0)", :key => "view_count", :sort => "desc"} 人气
+      %span 筛选
+    %dd
+      .swiper-container.goods_list_swiper
+        .swiper-wrapper
+          #waterfall-content.swiper-slide
+            %ul#container.picList.clearfix.waterfall-container{:style => "position: relative;"}
+              
+            #waterfall-loading{:style => "display: none;"}
+              %div{:style => "text-align:center;padding:10px 0; color:#999;"} loading...
+            #waterfall-message{:style => "text-align:center;color:#999;"}
+          #waterfall-empty.swiper-slide
+            .none
+              %p 抱歉，没找到相关商品！
+
+.sai
+  %form#form{:method => "get"}
+    %input{:name => "m", :type => "hidden", :value => "goods"}
+    %dl
+      %dt
+        %strong
+          %a#screening 确认
+        %span 取消
+        %h3 筛选
+      %dd
+        %ul
+          %li
+            %strong 品牌
+            %span{:style => "padding-top:40px;"}
+              %a
+                %select{:name => "brand_id", :style => "-webkit-appearance:none;border:none;font-size:14px;color:#35393c;margin-top:-31px;display: block;vertical-align:middle;font-family:微软雅黑;"}
+                  %option{:selected => "selected", :value => "-1"} 全部
+                  %option{:value => "2"} 广西南奥
+          %li
+            %strong 价格
+            %span{:style => "padding-top:40px;"}
+              %a
+                %select{:name => "price", :style => "-webkit-appearance:none;border:none;font-size:14px;color:#35393c;margin-top:-31px;display: block;vertical-align:middle;font-family:微软雅黑;"}
+                  %option{:selected => "selected", :value => "-1"} 全部
+                  %option{:value => "1,0"} 1以上
+
+  = javascript_include_tag "wap/#{controller_name}"
+

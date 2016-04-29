@@ -1,0 +1,3 @@
+class UserMessage
+  include  BaseModel
+end

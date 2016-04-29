@@ -1,0 +1,7 @@
+./.git
+client/node_modules
+tmp
+log
+public
+app/assets/javascripts/generated
+

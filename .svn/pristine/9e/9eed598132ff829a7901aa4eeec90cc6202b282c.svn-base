@@ -1,0 +1,20 @@
+.page-header
+  %h1
+    支付方式
+    %small
+      %i.ace-icon.fa.fa-angle-double-right
+      支付宝
+
+
+.tab-content
+  #basic.tab-pane.in.active
+    =simple_form_for( @item, url:"#{ace_path  @item}", method:"put", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form", :role => "form", id:"product-form"}) do |f| 
+
+      = f.input:name, required:true
+      = f.input:desc
+      = f.input :is_open, label: "是否打开" ,as: :select, hint: "支持该支付方式" 
+
+      = f.input :account, label: "支付宝收款账户"
+      = f.input :parter_id, label: "合作者身份编码(parterID)" , hint: "支付宝提供的合作者身份编码(以2088开头)"         
+      = f.input :sec_key, label: "交易安全校验码(key)" , hint: "支付宝提供的交易安全校验码  " 
+      = render '/partials/submit', f:f

@@ -1,0 +1,36 @@
+=javascript_include_tag "wap/#{controller_name}"
+.pay-result
+  %p 
+    恭喜您参与成功
+  %p 
+    请等待系统为您揭晓
+.buy
+  .continue#go_activity 继续夺宝
+  .see#go_order_index 查看夺宝记录
+.information
+  %p 
+    您成功参与了
+    %em
+      =@order.lottery_order_items.count
+    件奖品夺宝，信息如下:
+  .specific
+    -@order.lottery_order_items.each do |item|
+      .fl.txt-blue 
+        第#{item.prize_activity.begin_time.strftime("%Y%m%d%H%M")}期
+        %span 
+          =item.prize_activity.name
+      .fr
+        %em 
+          = item.prize_activity.prize.total_share
+        人次
+      .clear
+      .lucky-number
+        .fl 
+          幸运号码
+        %ul
+          - item.lotteries.each do |lottery|
+            %li
+              =lottery.seq
+          - if item.lotteries.count > 5
+            %li
+              %a 查看全部

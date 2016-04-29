@@ -1,0 +1,142 @@
+.banner.goods_detail_banner
+  .swiper-container.swiper1
+    .swiper-wrapper
+      - @item.prize.pictures.each do |photo|
+        .swiper-slide
+          %img{:src => "#{photo.url :app}"}
+    .swiper-pagination
+          
+.phtt
+  %span.underway 进行中
+  %strong=@item.name
+  %p#data_shop_price.org
+    %span.org1="￥#{@item.prize.sale_unit}"
+    %span.org2="￥#{@item.prize.price}"
+  .w-progressBar
+    %p.txt
+      商品期数:
+      %span="#{@item.begin_time.to_hms}"
+    %p.wrap
+      %span.bar{:style => "width:79.7%;"}
+        %i.color
+    .people
+      %span=" 总需#{@item.total_share}人次"
+      %span.underway-r
+        剩余
+        %em="#{@item.total_share - @item.saled_share}"
+
+    - if @item.prev_activity and  @item.prev_activity.is_done?
+      .m-detail-goods-result
+        .w-record
+          .label-winner
+            %img{:src => "/assets/images/award-person.png"}
+          .label-winner2
+            %img{:src => "/assets/images/winRecord.png"}
+          .w-record-avatar
+            %a{"data-invoke" => "", :href => ""}
+              %img{:height => "90", :onerror => "this.src=''", :src => "../assets/image/1451891467878922_0.jpeg", :width => "90"}
+          .w-record-detail
+            %p.f-breakword
+              获奖者：
+              %a{:href => ""} 夺个你死我活
+            %p
+              用户IP: 192.168.1.1
+              %span.txt-green (上海市)
+            %p 商品期数: 62820024
+            %p
+              本期参与：
+              %em> 10
+              人次
+            %p 揭晓时间：2016-04-12 17:34:00.000
+
+        .m-detail-goods-result-luckyCode
+          .luckyNum
+            幸运号:
+            %span 10004113
+  / <div class="stamp stamp01"><span>幸运号:<em>10004113</em></span></div>
+.ding.line.mb8
+  %ul
+    %a{:href => ""}
+      %li
+        %em
+          %img{:src => "/assets/images/record2.png"}/
+        %strong 晒单分享
+        %strong.text-color.pl10.bold (17)
+        %span.unfold
+          %img{:src => "/assets/images/unfold.png"}/
+      %li
+        %em
+          %img{:src => "/assets/images/winRecord2.png"}/
+        %strong 往期揭晓
+        %span.unfold
+          %img{:src => "/assets/images/unfold.png"}/
+      %li
+        %em
+          %img{:src => "/assets/images/userinfo.png"}/
+        %strong 本期参与
+        %time (2016-04-12 17:34:00开始)
+.award-detail
+  %ul
+    %li
+      .pdd
+        .fl.award-detail-t
+          %img{:src => "../assets/image/1451891467878922_0.jpeg"}/
+        .fr.award-detail-th
+          %p.txt-blue
+            userinfo
+            %span (福建福州 IP:192.168.1.1)
+          %p
+            参与了
+            %em> 5
+            人次
+            %time 2016-04-12 17:34:00.000
+    %li
+      .pdd
+        .fl.award-detail-t
+          %img{:src => "../assets/image/1451891467878922_0.jpeg"}/
+        .fr.award-detail-th
+          %p.txt-blue
+            userinfo
+            %span (福建福州 IP:192.168.1.1)
+          %p
+            参与了
+            %em> 5
+            人次
+            %time 2016-04-12 17:34:00.000
+    %li
+      .pdd
+        .fl.award-detail-t
+          %img{:src => "../assets/image/1451891467878922_0.jpeg"}/
+        .fr.award-detail-th
+          %p.txt-blue
+            userinfo
+            %span (福建福州 IP:192.168.1.1)
+          %p
+            参与了
+            %em> 5
+            人次
+            %time 2016-04-12 17:34:00.000
+
+
+- carts = LotteryCartItem.get_cart_by_user @current_user
+.shopa2
+  .goBuy{onClick:"javascript: goBuyLottery('#{@item.id}')"} 立即抢购
+  .goShop{onClick:"javascript: goLotteryCart('#{@item.id}')"} 加入购物车
+  .shopCart
+    %a{href:"/wap/lottery_cart"}
+      %img{:src => "/assets/images/ico_13.png"}
+
+      - unless carts.empty?
+        %span= carts.size
+
+
+:javascript
+    var swiper1 = new Swiper('.swiper1', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        loop: true,
+    });
+    var swiperb = new Swiper('.swiperb');      
+
+=javascript_include_tag "wap/#{controller_name}"
+

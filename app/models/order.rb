@@ -1,0 +1,413 @@
+class Order
+  include  BaseModel
+  include Mongoid::Search
+
+  attr_accessor :current_admin
+
+  field :sn, type:String
+
+  field :consignee, type: String
+  field :mobile,    type: String  
+
+  field :province
+  field :city
+  field :dist
+  field :street
+  field :zipcode
+  
+  field :client_ip
+
+  field :cash_discount,  type:Integer,default:0
+  field :reward_score, type:Integer,default:0     #获赠积分
+  field :score_discount, type:Integer, default:0 #积分抵扣
+
+  field :charge_id, type: String #charge id 
+  
+  field :ori_amount, type:Float # 原价总和
+  field :cash_amount, type:Float # 订单现金总和
+  field :score_amount, type:Float # 订单积分
+
+  field :real_amount, type:Integer, default:0 # 真实付款 unit: 分
+  
+  field :no_shipment, type:Boolean, default:false #不需要物流
+
+  field :shipping_fee, type:Float
+  field :shipping_type, default: 0 ,type:Integer 
+  field_display :shipping_type, { 0 => '平邮', 1 => '快递'}
+
+
+  #callback
+  field :trade_no, type:String
+  field :total_fee, type:Float
+
+  field :have_invoice, type:Boolean, default:false #是否需要发票
+
+
+        
+  field :confirm_time
+  field :remark # 订单备注  
+  
+  field :order_type, type:Integer, default:1  # 1:普通订单 2:微信订单
+  
+  has_many :order_products, dependent: :destroy
+  has_many :order_records
+
+  has_one :coupon
+
+  belongs_to :express
+  field   :express_sn , type:String #快递单号
+
+  belongs_to :user
+
+  after_update :send_notify
+  after_create :action_create
+
+  search_in :sn, :consignee, :mobile, :id, :user => :name
+
+  field :state, type:Integer, default:0
+  field_display :state, {0=>"待付款", 1=>"待发货", 2=>"待收货", 3=>"待安装", 4=>"已完成", 5=>"待退货确认", 6=>"待退货入库", 7=>"待退款", 99=>"已取消", 100=>"已删除"}  
+
+  field :pay_state, type:Integer, default:0 
+  field_display :pay_state, {0=>"待付款", 1=>"已支付", 2 => "已退款" }
+
+  field :shipping_state, default:0
+  field_display :shipping_state, {0 => "未发货", 1 => "已发货", 2 => "已签收", 3 => "退货中", 4 => "退货签收"}
+
+  field :comment_state, type:Integer, default:0
+  field_display :comment_state, {0=>"待评价", 1=>"部分评价", 2=>"已评价"}
+
+  field :best_time, type:Integer, default:0 #0:节假日收货  1:工作日收货　２：不限时间
+  field_display :best_time, {0=>"节假日收货", 1=>"工作日收货", 2=>"不限时间"}
+
+  field :pay_channel, type:Integer, default:0  
+  field_display :pay_channel, {0 => "支付宝", 1 => "微信"}
+  
+  default_scope ->{ where(:state.lt => 100) }
+  scope :wait_pay, ->{where(state:0)}
+  scope :wait_send, ->{where(state:1)}
+  scope :wait_receive, ->{where(state:2)}
+  scope :wait_comment, ->{where(comment_state: 0, state: 4)}
+
+
+  def as_json(options={})
+
+    data = super(:except => [:best_time, :terminal, :client_ip, :user_id, :comment_state, :out_trade_no, :email, :_keywords, :charge_id, :order_type,:confirm_time])
+      .merge({state_name: self.state_name})
+    data
+  end
+
+  def api_json
+    
+  end
+
+  def self.delete_expire_order   #7天前没付款的订单会自动删掉
+    time = 7.days.ago(Time.now)
+    Order.where(state:0,:c_at.lt => time).delete_all
+  end
+
+  #是否为退货流程
+  def is_refund?
+    self.state > 4 and self.state < 99 
+  end
+
+  #已经到货
+  def is_shipped?
+    shipping_state == 2
+  end
+
+  #已经发货
+  def is_shipping?
+    shipping_state == 1
+  end
+
+  #付款 流程 全部成功
+  def is_success?
+    pay_state == 1 and ( state == 4 or state == 100)
+  end
+
+
+  #管理后台是否可以直接确认结束的订单
+  def can_done?
+    return true if (no_shipment and self.state != 99)
+    self.state == 2 || self.state == 3
+  end
+
+  #能否发货
+  def can_send_goods?
+    self.pay_state == 1 and shipping_state == 0
+  end
+
+  #是否可以直接取消
+  def can_cancel?
+    self.pay_state == 0 and shipping_state == 0 and state != 99
+  end
+
+  def soft_delete!
+    self.update_attribute(:state, 100)
+  end
+
+  def is_assemble?
+    false
+  end
+
+  #取消订单！
+  def cancel!
+    self.update_attribute(:state, 99)
+    create_record!(:action_cancel)
+
+    if self.pay_state == 1
+      action_customer_refund
+    end
+  end
+
+  #返回是否可以取消订单
+  def is_cancelable?
+    return true if self.state == 0
+    false
+  end
+
+  #客户端删除订单, 未支付和已经完成的订单
+  def is_delable?
+    return true if self.state == 0    
+    return true if self.state == 4
+    false
+  end
+
+
+  def action_create
+    create_record!(__callee__)
+  end
+
+  #请求退货流程
+  def action_customer_refund
+    self.state =  5    
+
+    if self.save!
+      create_record!(__callee__)
+    end
+
+  end
+
+  #发货
+  def action_send_goods
+    self.state = 2
+    self.shipping_state = 1
+    if self.save!
+      create_record!(__callee__)
+    end
+
+  end
+
+  def action_confirm_refund  #确认退货流程
+    self.shipping_state = 3
+    self.state = 6
+    if self.save!
+      create_record!(__callee__)
+    end
+
+  end
+
+  #客户签收货物
+  def action_sign_goods
+    if is_assemble?
+      self.state = 3      #门店安装
+    else
+      self.state = 4      #派送到家, 流程结束
+    end
+
+    self.shipping_state = 2
+    if self.save!
+      create_record!(__callee__)
+    end
+
+  end  
+
+  #退货签收, 触发自动退款
+  def action_sign_refund
+    self.shipping_state = 4
+    self.state = 7
+
+    if self.save!
+      create_record!(__callee__)
+    end
+
+    do_refund
+  end
+
+  #完成订单
+  def action_done
+    self.state = 4
+    self.shipping_state = 2
+    if self.save!
+      create_record!(__callee__)
+    end
+
+  end
+
+  #未发货情况下,自动取消流程
+  def action_cancel
+
+    if self.state == 0 && self.pay_state == 0
+      self.state = 99  
+      if self.save!
+        create_record!(__callee__)
+      end
+
+    elsif self.pay_state === 1 && self.shipping_state === 0  #未发货
+      do_refund
+    end    
+  end
+
+  #返回是否可以退款
+  def can_do_refund?
+    self.pay_state === 1 && self.shipping_state === 0 
+  end
+
+  #退款
+  def do_refund
+    #退款处理
+    G.t "do refund"
+    
+
+    # self.on_refund_done  #test
+  end
+
+  #用户支付完成
+  def on_pay_done(real_amount, trade_no)
+    self.state  = 1
+    self.pay_state = 1
+    self.sub_stock
+    self.real_amount = real_amount
+    self.trade_no = trade_no
+
+    if self.save!
+      create_record!(__callee__)
+    end
+  end
+
+
+  # 退款成功
+  def on_refund_done
+    self.pay_state = 2
+    self.state = 4
+
+    G.t "do refund success"
+    self.sub_stock
+    
+    if self.save!
+      create_record!(__callee__)
+    end    
+  end
+
+  #修改评论状态！
+  def update_comment_state
+    comment_count = self.order_products.where(comment_state:3).count
+    if comment_count == self.order_products.count
+      self.update_attribute(:comment_state, 3) # 已全部评价
+    elsif comment_count > 0
+      self.update_attribute(:comment_state, 2) # 部分评价
+    end
+  end
+
+  def send_notify
+    return unless pay_state_changed?
+
+    # if self.pay_state.to_i == 1
+    #   Sms.delay.send_sms(self.mobile,Settings.send_notify,"#{self.mobile},#{self.sn}")
+    # end
+  end
+
+  #记录订单状态
+  def create_record!(act)
+    record = OrderRecord.new
+    record.action_note = I18n.t("attributes.#{act}", default: act )
+    record.state = state
+    record.pay_state = pay_state
+    record.shipping_state = shipping_state
+    record.order_id = self.id
+    
+    if current_admin
+      record.admin_user_id = current_admin.id
+      record.client_ip = current_admin.current_sign_in_ip
+    end
+
+    record.client_ip = user.client_ip if user    
+    record.save!
+  end
+
+  #返回订单状态的文字说明
+  def state_name
+    return '待付款' if state == 0 && pay_state == 0
+    return '待发货' if pay_state == 1 && state == 1
+    return '待收货' if pay_state == 1 && state == 2    
+    return '待评价' if state == 4 && comment_state != 3
+    return '已完成' if pay_state == 1 && state == 4
+    return '待退货确认' if state == 5
+    return '已取消' if state == 99
+  end
+
+  #获取用户包括 product的订单
+  def self.get_last_buy_time(user, product)
+    order_ids = Order.where(user: user).map(&:id)
+    last_order_product = OrderProduct.where(:order_id.in => order_ids, product: product).desc(:c_at).first
+
+    return last_order_product.created_at if last_order_product  
+    return Time.now - 1.year
+  end
+
+  #添加库存
+  def add_stock
+    order_products.each do |op|
+      op.variant.stock.stock_action op.num      
+    end
+  end
+
+  #减少库存
+  def sub_stock
+    order_products.each do |op|
+      op.variant.stock_action -(op.num.to_i), "订单: #{self.sn}"      
+    end
+  end
+
+  #将address的信息填充到order里
+  def fill_address (address)
+    self.consignee = address.consignee
+    self.mobile = address.mobile
+    self.province = address.province
+    self.city = address.city
+    self.street = address.street
+    self.zipcode = address.zipcode
+    self.save
+  end
+
+  #返回订单里所有商品的url
+  def photos (type = :app)
+    ret = []
+
+    order_products.each do |op|
+      ret << op.photo.url_for(type)
+    end
+
+    ret
+  end
+
+  #返回订单的所有商品名
+  def product_names
+    order_products.map(&:name).join ','
+  end
+#计算邮费
+  def calc_shipping_fee
+    self.shipping_fee = 0
+
+    order_products.each do |op|
+      rule = op.variant.product.shipping_rules.first  # 计算区域
+
+      if rule
+        self.shipping_fee += (rule.post_first_fee + rule.post_append_fee * (op.num - 1)) if shipping_type == 0
+        self.shipping_fee += (rule.express_first_fee + rule.express_append_fee * (op.num - 1)) if shipping_type == 1
+      end
+    end
+    
+  end
+
+end

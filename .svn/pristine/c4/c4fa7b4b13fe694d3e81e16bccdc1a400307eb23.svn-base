@@ -1,0 +1,32 @@
+= render '/partials/new_header'
+
+
+.tabbable
+  %ul#myTab4.nav.nav-tabs.padding-12.tab-color-blue.background-blue
+    %li.active
+      %a{:href => "?r=basic"} 基本信息
+
+  .tab-content
+    #basic.tab-pane.in.active
+      =simple_form_for( @item, url:"#{ace_path_create  @item}", method:"post", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form", :role => "form", id:"product-form"}) do |f| 
+
+        = f.input:name, required:true
+        = f.input:contactor
+        = f.input:mobile        
+
+        = f.input:state, collection: @item.class.get_field_display(:state)
+        
+        .form-group
+          = f.label :province, label:"地址",:class =>"control-label col-sm-3 no-padding-right"
+          .col-sm-9
+            #select-children.col-xs-10.col-sm-5.city-group
+              = f.select :province, []
+              = text_field_tag 'province_default', @item.province, type:'hidden'
+
+
+        = f.input:street
+
+        = render '/partials/submit', f:f
+          
+=javascript_include_tag "address_select"        
+

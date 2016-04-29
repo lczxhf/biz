@@ -1,0 +1,2 @@
+module Wap::AppointmentHelper
+end

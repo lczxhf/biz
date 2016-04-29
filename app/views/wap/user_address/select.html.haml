@@ -1,0 +1,19 @@
+.address
+  #waterfall-content.swiper-slide
+    %ul#container
+      - @current_user.user_addresses.each do |address|
+        %li
+          %a.select_goods_address{:href => "" , "data-id":"#{address.id}"}
+            %strong= address.consignee
+            %span= address.mobile
+            %p= address.readable_address
+
+          %b
+            %a{:href => "#{edit_wap_user_address_path address}"}
+              %img{:src => "/assets/images/ico_21.png"}
+
+    .mar15
+      %a{:href => "#{new_wap_user_address_path}"}
+        %input.btnBlue.mt10{:type => "button", :value => "添加新收货地址"}
+
+=javascript_include_tag "wap/#{controller_name}"

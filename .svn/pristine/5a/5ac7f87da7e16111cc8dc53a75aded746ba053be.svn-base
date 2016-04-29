@@ -1,0 +1,61 @@
+		<div class="pd0">
+			<div class="formula-pdd">
+				<div class="formula">
+					<h2>计算公式</h2>
+					<p>[(数值A+数值B)÷商品所需人次]取余数 + 10000001</p>
+				</div>
+			</div>
+			<div class="numA">
+				<h2>数值A</h2>
+				<p>=截止该商品最后夺宝时间最后50条全站参与记录</p>
+				<div class="spread">
+					<p>=<strong><%=@activity.get_A_number%></strong></p>
+					<div class="show">展开</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="numB">
+				<h2>数值B</h2>
+				<p>=最近一期中国福利彩票"老时时彩"的揭晓结果</p>
+				<p>=<span class="txt-yellow">正在等待揭晓...</span>(第2000002期)<span class="txt-blue">揭晓查询</span></p>
+			</div>
+			<div class="conut-result">
+				<h2>计算结果</h2>
+				<div>幸运号码:<span class="txt-yellow">等待揭晓...</span></div>
+			</div>
+
+			<div class="count-message" style="display: none;">
+				<table class="m-calc-resultList" cellpadding="0" cellspacing="0">
+					<thead>
+						<tr>
+							<th class="time">夺宝时间</th>
+							<th class="user">用户帐号</th>
+						</tr>
+					</thead>
+					<tbody>
+					    <%@activity.last_fifty_lotteries.each do |lottery|%>
+						<tr class="calcRow">
+							<td class="time"><%=lottery.u_at%><i class="ico ico-arrow-transfer"></i><b class="txt-red"><%=lottery.u_at.to_digital%></b></td>
+							<td class="user">
+								<div class="f-breakword"><a class="goUserPage" data-uid="<%=lottery.user.id%>" title="<%="#{lottery.user.name}(ID:#{lottery.user.id})"%>" href="javascript:void(0)"><%=lottery.user.name%></a></div>
+							</td>
+						</tr>
+						<%end%>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<script>
+			$(".show").click(function() {
+				if ($(".count-message").css("display") == "none") {
+					$(".count-message").show();
+					$(".numB,.conut-result").hide();
+					$('.show').text('收起');
+				} else {
+					$(".count-message").hide();
+					$(".numB,.conut-result").show();
+					$('.show').text('展开');
+				}
+			});
+		</script>

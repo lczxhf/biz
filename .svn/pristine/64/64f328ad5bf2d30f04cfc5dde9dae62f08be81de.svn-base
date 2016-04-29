@@ -1,0 +1,100 @@
+.dizi1
+  %ul
+    %li
+      %span 收货人
+      %p
+        %input.input_2{:name => "consignee", :placeholder => "请输入收货人姓名", :type => "text", :value => "#{@item.consignee}"}
+    %li
+      %span 手机号码
+      %p
+        %input.input_2{:name => "mobile", :placeholder => "请输入手机号码", :type => "text", :value => "#{@item.mobile}"}
+    %li
+      %span 邮政编码
+      %p
+        %input.input_2{:name => "zipcode", :placeholder => "请输入邮政编码", :type => "text", :value => "#{@item.zipcode}"}
+    %li
+      %span 所在地区
+      %p
+        %select#province{:name => "province", :style => "width: 20%;"}
+          %option{:value => "-1"} 选择省份
+
+          - provinces = ChinaCity.list 
+          - provinces.each do |p|
+            - if p.code == @item.province
+              %option{:value => "#{p.code}", :selected => "selected"}= p.name 
+            - else
+              %option{:value => "#{p.code}"}= p.name
+                
+    
+        %select#city{:name => "city", :style => "width: 20%;"}
+          %option{:value => "-1"} 选择城市
+
+          - cities = ChinaCity.list @item.province
+          - cities.each do |p|
+            - if p.code == @item.city
+              %option{:value => "#{p.code}", :selected => "selected"}= p.name 
+            - else
+              %option{:value => "#{p.code}"}= p.name
+
+
+        %select#district{:name => "dist", :style => "width: 20%;"}
+          %option{:value => "-1"} 选择地区
+
+          - dists = ChinaCity.list @item.city
+          - dists.each do |p|
+            - if p.code == @item.dist
+              %option{:value => "#{p.code}", :selected => "selected"}= p.name 
+            - else
+              %option{:value => "#{p.code}"}= p.name
+
+    %li
+      %span 详细地址
+      %p
+        %input.input_2{:name => "street", :placeholder => "请输入详细地址", :type => "text", value:"#{@item.street}"}
+  .mar15
+    %input.btnBlue{:onclick => "updateAddress('#{@item.id}')", :type => "button", :value => "保存收货地址"}
+    %input.btnRed.mt10{:onclick => "delAddress('#{@item.id}')", :type => "button", :value => "删除收货地址"}
+
+=javascript_include_tag "wap/#{controller_name}"
+
+:javascript
+  function updateAddress(id){
+    if (checkMobile ($("input[name='mobile']").val()) == false){
+      hd_alert("手机号码不正确");
+      return;
+    }
+  
+    $.ajax({
+      type: 'PUT',
+      url: '/api/user_address/'+id, 
+      data:{
+        "consignee": $("input[name='consignee']").val(),
+        "mobile": $("input[name='mobile']").val(),
+        "zipcode": $("input[name='zipcode']").val(),
+        "province": $("#province").val(),
+        "city": $("#city").val(),
+        "dist": $("#district").val(),
+        "street": $("input[name='street']").val()
+      }, 
+
+      success: function(data) {
+        console.log(data);
+        location.href = '/wap/user_address';
+      },
+      error: function(data){
+        hd_alert(data.error_message);
+      }
+    });
+  }
+
+  function delAddress(id){
+    $.ajax({
+      url: '/api/user_address/'+id, 
+      type: 'delete',
+      success:function(data){
+        hd_alert(data);
+        location.href = '/wap/user_address';
+      }
+    })
+  }
+

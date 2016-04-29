@@ -1,0 +1,25 @@
+= render '/partials/new_header'
+
+.tabbable
+  %ul.nav.nav-tabs.padding-12.tab-color-blue.background-blue
+    %li
+      %a{:href => "#"} 新模板
+
+  .tab-content
+    #property.tab-pane.active
+      = simple_form_for( @item,  url:"#{ace_path_create  @item}", method:"post", wrapper: :horizontal_form, :html => { :class => "form-horizontal", :role => "form" , :id => 'prop-form'}) do |f|
+
+        = f.input:name,   required:true
+
+        .form-group
+          = f.label "属性名称", :class =>"control-label col-sm-3 no-padding-right"
+
+          .col-sm-5.col-xs-12
+            %select.chosen-select.tag-input-style.col-xs-12{"data-placeholder" => "选择属性", :multiple => "multiple", name:"property_type_prototype[property_type_ids][]", form:"prop-form"}
+              - PropertyType.each do |prop|
+                %option{:value => "#{prop.id}"} 
+                  = prop.name
+
+        = render '/partials/submit', f:f  
+
+= javascript_include_tag 'ace_chosen'        

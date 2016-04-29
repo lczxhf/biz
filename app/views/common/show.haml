@@ -1,0 +1,62 @@
+- main_name = I18n.t("attributes.#{controller_name}", default:controller_name)
+.page-header
+  %h1
+    = main_name + "管理"
+    %small
+      %i.ace-icon.fa.fa-angle-double-right      
+      =  main_name +'信息'
+
+    %small.col-9.pull-right
+      %a{href:"#{ace_path item, :edit}"}
+        %span.green
+          %i.ace-icon.fa.fa-pencil-square-o 
+            编辑
+
+- item.as_json().each do |k, v|
+  - if v.to_s.include? '.png'
+    .show-row-img   
+      %span.col-sm-2.name
+        = I18n.t "attributes.#{k}"          
+      %span.col-sm-10        
+        = image_tag v, size:"100x100"
+
+  - elsif k.to_s.include? "_id" and k.to_s.length > 3
+    - plain_name = k.to_s.gsub("_id","")
+    - assio_item = item.send(plain_name)
+    - if assio_item
+      - plain_name = item.send(plain_name).class.name.classify.constantize   
+      - model = plain_name    
+      - ids = v    
+      - names = []
+      - if ids.is_a? Array
+        -ids.each do |id|
+          - _value = model.where(id: id).first
+          - names.push _value.name if _value      
+      - else
+        - _value = model.where(id:v).first
+        - names.push _value.name if _value
+
+      .show-row
+        %span.col-sm-2.name
+          = I18n.t "attributes.#{plain_name}"          
+        %span.col-sm-10        
+          = names.join(",")
+
+  - else  
+    .show-row    
+      %span.col-sm-2.name
+        = I18n.t "attributes.#{k}"          
+      %span.col-sm-10.value        
+        = v
+
+  .clearfix
+
+- if item.respond_to? :picture
+  .show-row-img   
+    %span.col-sm-2.name
+      图片
+
+    %span.col-sm-10        
+      = image_tag item.picture.url(:thumb), size:"100x100" if item.picture
+  
+         

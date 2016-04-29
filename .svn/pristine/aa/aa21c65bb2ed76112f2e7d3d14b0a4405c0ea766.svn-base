@@ -1,0 +1,14 @@
+class Wap::ForceLoginController < Wap::ApplicationController
+  before_filter :force_login
+
+
+  def force_login
+    flash[:notice] = '请先登录'
+    if @current_user.is_tmp? && request.headers['accept'].include?('json')
+    	render json: {result_code:3,result_msg:'请先登录'}
+    elsif @current_user.is_tmp?
+    	redirect_to new_wap_session_path 
+	end
+  end
+
+end

@@ -1,0 +1,73 @@
+%dl.dldt
+  %dd
+    .swiper-container
+      .swiper-wrapper
+        #waterfall-content.swiper-slide
+          .shou
+            %ul#container.waterfall-container{:style => "position: relative;"}
+            #waterfall-loading{:style => "display: none;"}
+              %div{:style => "text-align:center;padding:10px 0; color:#999;"} loading...
+            #waterfall-message{:style => "text-align:center;color:#999;"}
+        #waterfall-empty.swiper-slide
+          .none
+            %img{:src => "/assets/images/bg_3.png"}/
+            %p 您还没有相关的收藏
+
+
+:javascript
+  $('#container').waterfall({
+    debug: false,
+    dataType: 'json',
+    path: "/api/favorite_product",
+    params: {
+      type: "all"
+    },
+
+    callbacks: {
+      loadingFinished: function($loading, isBeyondMaxPage, data) {
+        
+        if (!isBeyondMaxPage) {
+          $loading.fadeOut();
+        } else {
+          $loading.hide();
+          $('#meiyou').show();
+        }
+        var _html = '', order_txt = '收藏';
+
+        if (data.list.length == 0 && $('#container').html().length == 0) {
+          $("#waterfall-content").hide();
+          $("#waterfall-empty").show();
+          return false;
+        }
+
+        if (data.list == undefined){
+          $loading.hide();
+          return false;
+        }
+
+        data.list.forEach (function(item) {
+            
+          console.log(item);
+
+          _html += '<li><em><a href="' + "/wap/product/" + item.product.product_id + '"><img src="' + item.product.photo + '" /></a></em>';
+          _html += '<p><a href="' + "/wap/product/" + item.product.product_id + '">' + item.product.name + '</a><strong class="org">&#xFFE5;' + item.product.price + '</strong></p>';
+          _html += '<span><a href=' + '"javascript:;"' + 'onclick="_cancel(' + "'" + item.favorite_id + "'" + ');"' + '" class="btnB">取消收藏</a></span></li>';
+        })
+        $('#container').append(_html);
+      }
+    },
+  });  
+
+  function _cancel(id) {
+    hd_alert("确定取消该收藏吗？", 2000, 'confirm', function() {
+      $.ajax({ url: "/api/favorite_product/" + id, 
+        data: {id: id},
+        type: 'delete',
+        success: function(ret){
+           hd_alert(ret.info);
+          location.reload();
+        }
+      });
+    })
+
+  }

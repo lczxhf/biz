@@ -1,0 +1,58 @@
+=javascript_include_tag "wap/#{controller_name}"
+
+%ul.shopCartPage
+  - @items.each do |item|
+    %li{"item-id":"#{item[:id]}" , "id":"item#{item[:id]}"}
+      .fl
+        %img{:src => "#{item[:picture]}"}
+
+      .fr
+        %h2=item[:name]
+        %p
+          总需#{item[:total]}/剩余
+          %span= item[:remain]
+
+        .inpT{id:"#{item[:id]}T"}
+          %a.inpl{id:"#{item[:id]}l"} -
+          %input.sdddq{:value => "#{item[:num]}", id:"#{item[:id]}"}
+          %a.inpr{:style => "", id:"#{item[:id]}r"} +
+
+        %a.del{:href => "javascript:;"}
+          %i.ico.ico-del
+        %p 奖品最新一期火速进行中！
+        - if item[:id_done?]
+          %p{style: "color:red;"} 活动已过期！请删除！
+
+    :javascript
+      window.inputp.addNew($("##{item[:id]}"), parseInt("#{item[:sale_unit]}"));    
+
+.none1.hide
+  %img{:src => "/assets/images/bg_5.png"}
+  %p 您的购物车还是空的
+  %p
+    %a{:href => "/wap/home"} 先去逛逛
+
+.btnC
+  %p
+    共
+    %span>=@items.size
+    件商品,总共需要
+    %span.txt-red>=@items.map(&:to_ostruct).map(&:num).inject(&:+)
+    元
+  %a.btnRed-t.hover{:href => "javascript:void(0)",:onclick => "submitLottery()"} 提交订单
+
+
+:css
+  body{background: #fff  }
+  .fl img {width:64px; height:64px;}  
+
+:javascript
+  $('a.del').on('click', function(e) {
+    var item_id = $(this).parents('li').attr('item-id');
+    delLotteryCartItem(item_id);
+  });
+  if("#{flash[:pay_state]}"!=''){
+      alert("#{flash[:pay_state]}")
+  }
+  
+

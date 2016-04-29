@@ -1,0 +1,66 @@
+= render '/partials/show_header'
+
+.tabbable
+  %ul#myTab4.nav.nav-tabs.padding-12.tab-color-blue.background-blue
+    %li.active
+      %a{:href => "#basic", "data-toggle"=>"tab"} 基本信息
+    %li
+      %a{:href => "#detail","data-toggle"=>"tab"} 详情
+
+    %li.bmap
+      %a{:href => "#map","data-toggle"=>"tab"} 地图
+    %li
+      %a{:href => "#gallery","data-toggle"=>"tab"} 图册     
+
+  .tab-content
+    #basic.tab-pane.in.active
+      =simple_form_for( @item, url:"/admin/shops/#{@item.id}", method:"put", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form", :role => "form", id:"product-form"}) do |f| 
+
+        = f.input:name, required:true
+        = f.input:contactor
+        = f.input:mobile        
+
+        = f.input:state, collection: @item.class.get_field_display(:state)
+        = f.input:full_address        
+  
+    #detail.tab-pane.in
+      = @item.content.html_safe if @item.content  
+
+    #gallery.tab-pane.in      
+      -@action_url = "/admin/photo?shop_id="+@item.id.to_s
+      -@photos = @item.photos
+      = render '/partials/shop_photos'                                        
+
+
+    #map.tab-pane.in
+      .map#allmap        
+
+%script{src: "http://api.map.baidu.com/api?v=2.0&ak=CwSGsPMUcewm0GD59ClzqZmz"}
+
+:javascript
+  var timer;
+  function init_map(){
+    var map, marker;      
+    map = new BMap.Map("allmap");  
+    var shop_point = new BMap.Point(parseFloat("#{@item.loc[1]}"), parseFloat("#{@item.loc[0]}"));          
+    map.centerAndZoom(shop_point,17); 
+    create_marker(shop_point);    
+
+    function create_marker(point){        
+      marker = new BMap.Marker(point);// 创建标注
+      map.addOverlay(marker);                    
+    };    
+    clearInterval(timer);
+    $("#allmap").fadeIn();
+  };
+
+  $("li.nav-container").removeClass("open");
+  $("#nav-shop").addClass("open");
+  $("#nav-shop-new").addClass("active");
+  $("#dropzone").hide();
+  $(".bmap").on("click", function(){ 
+    timer = setInterval( "init_map()", 100 ); 
+  });
+
+  
+  

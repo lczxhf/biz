@@ -1,0 +1,51 @@
+= render '/partials/edit_header'
+
+
+.tabbable
+  %ul.nav.nav-tabs.padding-12.tab-color-blue.background-blue
+    %li.active
+      %a{:href => "?r=basic"} 基本信息
+    %li
+      %a{:href => "?r=detail"} 详情    
+    %li
+      %a{:href => "?r=map"} 地图
+    %li
+      %a{:href => "?r=gallery"} 图册          
+
+
+  .tab-content
+    #basic.tab-pane.in.active
+      =simple_form_for( @item, url:"#{ace_path  @item}", method:"put", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form", :role => "form", id:"product-form"}) do |f| 
+
+        = f.input:name, required:true
+        = f.input:contactor
+        = f.input:mobile        
+
+        = f.input:state,  collection: @item.class.get_field_display(:state)
+
+        = react_component 'TreeApp', props:{title:"选择商品",  url: "/api/tree?root=product", selected:[], multi:false }        
+
+
+        .form-group
+          = f.label :province, label:"地址", :class =>"control-label col-sm-3 no-padding-right"
+          .col-sm-9
+            #select-children.col-xs-10.col-sm-5.city-group
+              = f.select :province,[]
+              = text_field_tag 'province_default', @item.province, type:'hidden'
+              - unless @item.new_record?
+                = f.select :city, []
+                = text_field_tag 'city_default', @item.city, type:'hidden'
+                = f.select :dist, []
+                = text_field_tag 'dist_default', @item.dist, type:'hidden'
+                
+        = f.input:street
+
+        = render '/partials/submit', f:f  
+
+
+=javascript_include_tag "address_select"
+
+:javascript
+  $("#shop_mobile").on("focus", function(e){
+    $("#modal-tree").modal(); 
+  });

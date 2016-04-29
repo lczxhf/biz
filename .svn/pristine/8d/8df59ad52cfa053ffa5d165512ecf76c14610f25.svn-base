@@ -1,0 +1,32 @@
+= render '/partials/new_header'
+
+.tabbable
+  %ul#myTab4.nav.nav-tabs.padding-12.tab-color-blue.background-blue
+    %li.active
+      %a{:href => ""} 基本信息
+  .tab-content
+    #basic.tab-pane.in.active
+      =simple_form_for( @item, url:"#{ace_path_create @item}", method:"post", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form", :role => "form", id:"product-form"}) do |f| 
+        
+        = f.input:name
+        = f.input:type,  as: :select, collection: @item.class.get_field_display(:type) , hint:'优惠方式'
+
+
+        = f.input:threshold,  as: :integer, hint:'满多少金额'
+        = f.input:value,  as: :integer, hint:'赠送购物券、或直接减现金'
+
+        = f.input :begin_time, input_html:{ :onclick => "WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'});"}
+        = f.input :end_time,  input_html:{ :onclick => "WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'});"}
+
+        = react_component("TreeApp", props: {title:"选择商品",  url: "/api/tree?root=product", selected:[], multi:true } )
+        = f.input :product_name, input_html:{id:"product_name", value:"", name:""}
+        %input#product_id.hide{name:"product_ids", value:""}
+        %input.hide
+
+        = render '/partials/submit', f:f        
+
+:javascript
+  $("#product_name").on("focus", function(e){
+    $("#modal-tree").modal(); 
+  });
+

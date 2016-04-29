@@ -1,0 +1,13 @@
+- label = I18n.t "attributes.#{field}"
+- name = "#{controller_name}[#{field}]"
+.form-group
+  = f.label label, :class =>"control-label col-sm-3 no-padding-right"
+  .col-sm-8.col-xs-12      
+    - if default
+      %input.ace.ace-switch.ace-switch-5{:checked => "#{default}", :type => "checkbox", name:"#{name}", value:"true"}
+    - else
+      %input.ace.ace-switch.ace-switch-5{:type => "checkbox", name:"#{name}", value:"true"}
+    %span.lbl.middle
+    %span 
+    = hint if hint
+

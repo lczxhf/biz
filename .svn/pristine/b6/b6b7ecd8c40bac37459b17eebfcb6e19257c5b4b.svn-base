@@ -1,0 +1,25 @@
+#encoding:utf-8
+
+require "json"
+namespace :biz do
+    desc "init admin"
+    task :init_admin => :environment do
+        AdminUser.delete_all
+
+        admin = AdminUser.new 
+        admin.email = 'admin@lmoar.com'
+        admin.password = 'admin@lmoar.com'
+        admin.username = '18688776399'
+        admin.name = 'admin'
+        admin.role = 'admin'
+
+        if admin.save!
+            p 'admin init ok.'
+        end
+
+        cat_product = Category.create name:'商品', code:'product'
+        cat_service = Category.create name:'服务', code:'service'
+
+        first_user = User.create mob:'18688776399', password: 'user@lmoar.com'
+    end
+end

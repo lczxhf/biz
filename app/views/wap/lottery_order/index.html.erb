@@ -1,0 +1,113 @@
+<dl class="dldt2 award-record-h">
+        <dt class="relR" style="position: static;">
+                <strong class=""><span>全部</span></strong>
+                <strong data-load="comment" class=""><span>进行中</span></strong>
+                <strong data-load="consult" class=""><span>已揭晓</span></strong>
+            </dt>
+        <dd class="award-record" style="display:block ;">
+          <ul>
+            <%@activities.each do |activity|%>
+            <li target="<%=activity.is_done? ? true : false%>">
+              <div class="fl"><img src="<%=activity.prize.pictures.first.url%>"></div>
+              <div class="fr">
+                <h2><%=activity.name%></h2>
+                <p>总需:<%=activity.total_share%>人次</p>
+                <p>商品期数: <%=activity.begin_time.strftime("%Y%m%d%H")%></p>
+                <%if activity.is_done?%>
+                <p>获奖者：<a href=""><%=activity.get_lucky_user.name%></a>(本期参与<%=activity.time_of_user_buy%>人次)</p>
+                <p>幸运号码:<span><%=activity.calc_lucky_no%></span></p>
+                <p>揭晓时间：<%=activity.end_time.strftime("%Y-%m-%d %H:%M:%S")%></p>
+                <%end%>
+                <input type="hidden" value="<%=@current_user.lotteries.where(prize_activity:activity).map {|a| a.seq}.join(',')%>" />
+                <p>本期参与:<span><%=activity.time_of_user_buy(@current_user)%></span>人次<span class="look">查看我的号码</span></p>
+              </div>
+            </li>
+            <%end%>
+          </ul>
+          <p class="noMore">已经没有更多</p>
+        </dd>
+        <div class="message" style="display: none;">
+          <div class="message-pdd">
+            <h2>南宁南奥奥迪 A8 全系车型 1千元定金summer欧v块南宁南奥奥迪 A</h2>
+            <p>参与<span>2</span>人次，夺宝号码:</p>
+            <ul id="ul_lottery">
+              <li>10002012</li>
+              <li>10002012</li>
+              <li>10002012</li>
+              <li>10002012</li>
+            </ul>
+          </div>
+          <div class="confirm">确定</div>
+        </div>
+        <!-- <dd class="award-record" style="display: none;">
+          <div class="snatching">
+            你还没有夺宝记录
+          </div>
+        </dd> -->
+        <!-- <dd class="award-record" style="display:none ;">
+          <ul>
+            <li>
+              <div class="fl"><img src="../assets/image/1451891467878922_0.jpeg"></div>
+              <div class="fr">
+                <h2>南宁南奥奥迪 A8 全系车型 1千元定金summer欧v块南宁南奥奥迪 A8 全系车型 1千元定金summer欧v块</h2>
+                <p>总需:9500人次</p>
+                <p>商品期数: 62820024</p>
+                <p>获奖者：<a href="">夺个你死我活</a>(本期参与100人次)</p>
+                <p>幸运号码:<span>10002012</span></p>
+                <p>揭晓时间：2016-04-12 17:34:00.000</p>
+                <p>本期参与:<span>2</span>人次<span class="look">查看我的号码</span></p>
+              </div>
+            </li>
+          </ul>
+          <p class="noMore">已经没有更多</p>
+        </dd> -->
+        <script id="loadTemplate" type="text/html">
+          <li>
+            <em><img src=""/></em>
+            <strong></strong>
+            <p>
+
+            </p>
+            <span></span>
+          </li>
+        </script>
+      </dl>
+      <script>
+      $(document).ready(function() {
+        $(document).on('click',".look",function() {
+          content = $(this).parent()
+          $(".message h2").html(content.siblings("h2").html())
+          $(".message span").html(content.children("span:eq(0)").html())
+          var arr = content.prev().val().split(',')
+          var html= ""
+          for(x in arr){
+              html += "<li>"+arr[x]+"</li>"
+          }
+          $("#ul_lottery").html(html)
+          $(".message,.black_overlay").show();
+        });
+        $(".confirm").click(function(){
+          $(".message,.black_overlay").hide();
+        });
+
+        var activing_html = ""
+        var done_html = ""
+        $("li[target='true'").each(function(){
+            done_html += "<li>"+$(this).html()+"</li>"
+        })
+        $("li[target='false'").each(function(){
+            activing_html += "<li>"+$(this).html()+"</li>"
+        })
+        if(activing_html==""){
+          activing_html += '<dd class="award-record" style="display: none;"><div class="snatching">你还没有夺宝记录 </div></dd> '
+        }else{
+          var activing_html = '<dd class="award-record" style="display:none;"><ul>'+activing_html+'</ul><p class="noMore">已经没有更多</p></dd>'
+        }
+        if(done_html==""){
+          done_html += '<dd class="award-record" style="display: none;"><div class="snatching">你还没有夺宝记录 </div></dd> '
+        }else{
+          var done_html = '<dd class="award-record" style="display:none;"><ul>'+done_html+'</ul><p class="noMore">已经没有更多</p></dd>'
+        }
+        $(".award-record").after(activing_html+done_html)
+      });
+    </script>

@@ -1,0 +1,45 @@
+// Place all the styles related to the wap/session controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.other-login {
+            margin-top: 28px;
+            text-align: center;
+          }
+          
+.other-login span {
+  display: inline-block;
+  padding-right: 17px;
+}
+
+.other-login a {
+  float: left;
+  display: block;
+  width: 44px;
+  height: 44px;
+  background: asset_path('other-login.png') no-repeat;
+}
+
+.other-login em {
+  float: right;
+  margin-left: 20px;
+  line-height: 44px;
+  color: #ccc;
+  font-style: normal;
+}
+
+.other-login .sina_login {
+  background-position: 0 -44px;
+}
+
+.other-login .qq_login {
+  background-position: -60px -44px;
+}
+
+.other-login .alipay_login {
+  background-position: -180px -44px;
+}
+
+.other-login span:last-child em {
+  display: none;
+}

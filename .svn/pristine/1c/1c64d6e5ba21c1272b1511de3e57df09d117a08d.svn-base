@@ -1,0 +1,20 @@
+<ul>
+					<%activities.each do |activity|%>
+					<li>
+						<div class="m-detail-goods-result mar0 bordb0">
+							<div class="w-record-title"><a href="" data-invoke="" data-pro="itemHeader">商品期数:<%=activity.begin_time.strftime("%Y%m%d%H%M")%> ( 揭晓时间：<%=activity.try(:end_time).try(:strftime,"%Y-%m-%d %H:%M") || '暂未揭晓'%> )</a></div>
+							<div class="w-record2">
+								<div class="w-record-avatar">
+									<a href="" data-invoke=""> <img width="90" height="90" onerror="this.src=''" src="<%=activity.prize.pictures.first.url%>"></a>
+								</div>
+								<div class="w-record-detail">							 
+									<p class="f-breakword">获奖者: <a href=""><%=activity.get_lucky_user.try(:name) || '无'%></a> </p>
+									<p>用户IP: <%=activity.get_lucky_order.ip2address%><span class="txt-green">(<%=activity.get_lucky_order.user_ip%>)</span></p>
+									<p>幸运号码: <em><%=activity.lucky_no%></em></p>
+									<p>本期参与: <em><%=activity.total_share%></em>人次</p>
+								</div>
+							</div>
+						</div>
+					</li>
+					<%end%>
+				</ul>

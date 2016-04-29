@@ -1,0 +1,1 @@
+Mongoid::AutoIncrementId.seq_cache_size = 200

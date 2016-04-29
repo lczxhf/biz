@@ -1,0 +1,78 @@
+.addr1
+  %h3
+    %img{:src => "/assets/images/ico_22.png"}>/
+    请选择并确认您的收货地址
+  %ul
+    %a{:href => "/wap/user_address/select"}
+      - if @default_address
+        %li#default_address{"data-address_id" => "#{@default_address.id}"}
+          %strong="收货人：#{@default_address.consignee}"
+          %span=@default_address.mobile
+
+          %p="#{@default_address.readable_address} [#{@default_address.zipcode}]"
+
+      - else
+        %li
+          %strong 暂无收货地址  
+          %span 请选择
+/
+  <a href="" class="block">
+  <div class="zhip clearfix"><strong>支付配送</strong>
+  <p><em class='normal'></em><em class='normal'></em></p>
+  </div>
+  </a>
+
+:css
+  select.shipping{border: none; float: right;margin-right:15px; font-size:14px; padding-right:25px; background: #fff url(/assets/images/ico_15.png) no-repeat right center; background-size:8px; line-height:40px;}
+
+%ul.zhip1.clearfix
+  %li
+    %strong 配送方式
+    %select.shipping{:name => "shiping_type"}
+      %option{:value => 0, "#{@temp_order.shipping_type.to_i == 0 ? 'selected': '' }" => 'true'} 快递
+      %option{:value => 1, "#{@temp_order.shipping_type.to_i == 1 ? 'selected': '' }" => 'true'} 平邮
+
+%ul.zhip1
+  %a{:href => ""}
+    %li
+      %strong 现金折扣
+      %span{"data-coupons_id" => ""}
+      %span="￥#{@temp_order.cash_discount}"
+  /
+    <a href="">
+    <li><strong>发票信息</strong><span>请填写</span></li>
+    </a>
+%ul.zhip1
+  %a{:href => ""}
+    %li
+      %strong 使用积分券
+      %span 请选择
+.dan1
+  %h3
+    %input.input_b{:name => "remark", :placeholder => "订单备注", :type => "text"}
+  %ul
+    - @current_user.temp_order.order_products.each do |op|
+      %li
+        %em
+          %a{:href => "javascript:;"}
+            %img{:src => "#{op.variant.product.get_photos.first.url}"}
+        %p
+          %a{:href => "javascript:;"}
+            - if op.variant.product.promotion_rule
+              %font{:color => "red"}>="[#{op.variant.product.promotion_rule.name}]"
+
+            = op.variant.product.name
+          %span="规格：#{op.variant.option_values.map(&:name).join ','}"
+          %strong
+            %b.org>
+            x
+            =op.num
+.btnF
+  %a#btn_order.btnBlue1.hover{:href => "javascript:;"} 结算
+  %p
+    %strong.org>="合计：￥#{@temp_order.total}"
+    %em#real_amount.normal="结算商品数量：#{@temp_order.num} 件"
+    
+=javascript_include_tag "wap/#{controller_name}"
+
+

@@ -1,0 +1,18 @@
+= render '/partials/edit_header'
+
+.tabbable
+  %ul.nav.nav-tabs.padding-12.tab-color-blue.background-blue
+    %li
+      %a{:href => "?r=basic"} 基本信息
+    %li.active
+      %a{:href => "?r=detail"} 详情
+    %li
+      %a{:href => "?r=map"} 地图
+    %li
+      %a{:href => "?r=gallery"} 图册    
+      
+  .tab-content
+    #detail.tab-pane.active
+      = simple_form_for( @item, url:"#{ace_path  @item}",  method:"put") do |f|
+        = f.input :content, :as => :ckeditor, :input_html => { :ckeditor => {:toolbar => 'Full'} }, label: false
+        = render '/partials/submit', f:f            

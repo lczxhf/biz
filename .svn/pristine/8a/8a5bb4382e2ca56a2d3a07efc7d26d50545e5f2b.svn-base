@@ -1,0 +1,21 @@
+.header{margin-top: 0px}
+.footer{width: 100%}
+p.help-block{padding-left: 10px;}
+.wysiwyg-editor{height:400px; max-height:640px;}
+.map{height:400px; max-height:640px;}
+.show-row {min-height: 36px; background-color: #f5f5f5; padding:6px 0px; margin:1px 0px;} 
+.show-row-img {height: 110px; background-color: #f5f5f5; padding:6px 0px; margin:1px 0px;} 
+.show-row-content {height: auto; background-color: #f5f5f5; padding:6px 0px; margin:1px 0px;} 
+span.name{ text-align: right;}
+span.value{text-align: left;}
+.screenshot a img{width: 116px; height: 116px;}
+.image-uploader-area #screenshots_list .screenshot{display: inline; height: 120px; width: 120px; overflow: hidden;}
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+td.ui-dialog-header{background-color: #01579B}
+div.ui-dialog-title{color: #ffffff}
+.qq-upload-button input{height: 120px}

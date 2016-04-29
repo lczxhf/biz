@@ -1,0 +1,2 @@
+module Admin::PayConfigHelper
+end

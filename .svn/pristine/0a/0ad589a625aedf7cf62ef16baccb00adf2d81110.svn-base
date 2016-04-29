@@ -1,0 +1,34 @@
+class Wap::ApplicationController < ApplicationController
+  before_filter :set_title ,:init_user 
+  before_filter :set_page,  :only => [:edit, :show]
+
+  layout 'wap'
+
+  # before_filter :get_current_user
+
+  def set_title
+    @title = controller_name
+  end
+
+  def set_page
+    @item = controller_name.classify.constantize.where(:id => params[:id]).first
+  end
+
+  def init_user
+    user_id = session[:user_id]
+    @current_user = user_id.nil? ? nil : User.find_by_id(user_id)    
+    # tmp_user = nil
+
+    if @current_user.nil?
+      # session[:uuid] ||= SecureRandom.hex(10)
+      # tmp_user = User.find_or_create_by(uuid: session[:uuid])
+      # tmp_user.state = 0    
+      @current_user = User.create(state:0)
+      session[:user_id] = @current_user.id
+    end
+    puts "ip: #{request.real_ip}"
+    @current_user.client_ip = request.real_ip
+    @current_user.save
+  end
+  
+end

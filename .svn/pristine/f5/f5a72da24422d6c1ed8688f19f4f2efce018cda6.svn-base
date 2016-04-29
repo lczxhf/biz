@@ -1,0 +1,92 @@
+= render '/partials/edit_header'
+
+.tabbable
+  %ul.nav.nav-tabs.padding-12.tab-color-blue.background-blue
+    %li
+      %a{:href => "?r=basic"} 基本信息
+    %li
+      %a{:href => "?r=detail"} 详情      
+          
+    %li.active
+      %a{:href => "?r=map"} 地图
+    %li
+      %a{:href => "?r=gallery"} 图册    
+
+  .tab-content
+    #map.tab-pane.in.active
+      =simple_form_for( @item, url:"#{ace_path  @item}", method:"put", wrapper: :horizontal_form, :html => { :class => "form-horizontal product-basic-form", :role => "form", id:"product-form"}) do |f| 
+
+        .form-group.col-xs-12
+          .map#allmap
+          %input#lng.hide{name:"lat", value:"114.067262"}
+          %input#lat.hide{name:"lng", value:"22.545311"}
+
+        = render '/partials/submit', f:f
+
+
+:javascript
+  var timer;
+  var init_function;
+  (function() {    
+     init_function = function init(){
+      var map, marker;
+      var city_name;
+      var geolocation;
+
+      map = new BMap.Map("allmap");  
+
+      city_name = "#{@item.province + @item.city}";
+      var shop_point = new BMap.Point(parseFloat("#{@item.loc[1]}"), parseFloat("#{@item.loc[0]}"));    
+      //map.centerAndZoom(city_name,14);
+
+      geolocation = new BMap.Geolocation();
+
+      var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+      var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+      var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL});
+
+      var navigationControl = new BMap.NavigationControl({
+        // 靠左上角位置
+        anchor: BMAP_ANCHOR_TOP_LEFT,
+        // LARGE类型
+        type: BMAP_NAVIGATION_CONTROL_LARGE,
+        // 启用显示定位
+        enableGeolocation: true
+      });
+      map.addControl(navigationControl);
+      
+      map.centerAndZoom(shop_point, 16);  
+      create_marker(shop_point);
+
+      
+      var select_point;
+      map.addEventListener("click", function(e){        
+        select_point = e.point;
+        create_marker(select_point);
+      });
+      
+
+      function create_marker(point){
+        map.clearOverlays();
+
+        marker = new BMap.Marker(point);// 创建标注
+        map.addOverlay(marker); 
+
+        //console.log("create_marker " + point.lng + "," + point.lat); 
+
+        $("#lng").attr("value", point.lng);
+        $("#lat").attr("value", point.lat);
+        map.centerAndZoom(point,17);  
+      };
+
+      clearInterval(timer);
+      //$("#allmap").fadeIn();
+    };
+    
+
+    $(document).ready(function() {
+      timer = setInterval( "init_function()", 500 ); 
+       //return init();
+    });
+
+  }).call(this);

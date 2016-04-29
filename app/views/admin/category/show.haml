@@ -1,0 +1,38 @@
+.page-header
+  %h1
+    商品分类
+    %small
+      %i.ace-icon.fa.fa-angle-double-right
+      查看
+
+    %small.col-9.pull-right
+      %a{href:"#{ace_path @item, :edit}"}
+        %span.green
+          %i.ace-icon.fa.fa-pencil-square-o 
+            编辑
+.clearfix  
+
+.tabbable
+  %ul.nav.nav-tabs.padding-12.tab-color-blue.background-blue    
+    %li.active
+      %a{:href => "#basic", "data-toggle"=>"tab"} 基本信息
+
+  .tab-content
+    #basic.tab-pane.in.active
+
+      = render '/partials/row', item: @item, field: :name
+      = render '/partials/row', item: @item, field: :brief
+      = render '/partials/row', item: @item, field: :position
+      = render '/partials/row', item: @item, field: :parent, value: Category.where(id:@item.parent).first.name if @item.parent != nil
+      
+      = render '/partials/row', item: @item, field: :u_at
+      .show-row-img   
+        %span.col-sm-2.name
+          图片
+
+        %span.col-sm-10        
+          = image_tag  @item.picture.url(:thumb), size:"100x100" if @item.picture
+
+
+   
+     

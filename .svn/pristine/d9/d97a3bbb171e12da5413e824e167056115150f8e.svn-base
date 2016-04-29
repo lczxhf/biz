@@ -1,0 +1,119 @@
+.banner.goods_detail_banner
+  .swiper-container.swiper1
+    .swiper-wrapper
+      - @item.prize.pictures.each do |photo|
+        .swiper-slide
+          %img{:src => "#{photo.url :app}"}
+    .swiper-pagination
+          
+.phtt
+  %span.underway 进行中
+  %strong=@item.name
+  %p#data_shop_price.org
+    %span.org1="￥#{@item.prize.sale_unit}"
+    %span.org2="￥#{@item.prize.price}"
+  .w-progressBar{'item-id':"#{@item.id}"}
+    %p.txt
+      商品期数:
+      %span="#{@item.begin_time.to_hms}"
+    %p.wrap
+      %span.bar.prize_progress{:style => "width:79.7%;"}
+        %i.color
+    .people
+      %span=" 总需#{@item.total_share}人次"
+      %span.underway-r
+        剩余
+        %em.prize_remain="#{@item.total_share - @item.saled_share}"
+
+    - if @item.prev_activity and  @item.prev_activity.is_done?
+      .m-detail-goods-result
+        .w-record
+          .label-winner
+            %img{:src => "#{@item.prev_activity.get_lucky_user.avatar.thumb.url}"}
+          .label-winner2
+            %img{:src => "/assets/images/winRecord.png"}
+          / .w-record-avatar
+          /   %a{"data-invoke" => "", :href => ""}
+          /     %img{:height => "90", :onerror => "this.src=''", :src => "../assets/image/1451891467878922_0.jpeg", :width => "90"}
+          .w-record-detail
+            %p.f-breakword
+              获奖者：
+              %a{:href => ""}
+                = @item.prev_activity.get_lucky_user.name
+            %p
+              用户IP:  #{@item.prev_activity.get_lucky_order.user_ip}
+              %span.txt-green (#{@item.prev_activity.get_lucky_order.user_ip})
+            %p 商品期数: #{@item.prev_activity.c_at.strftime('%Y%m%d%H%M')}
+            %p
+              本期参与：
+              %em>
+                =@item.prev_activity.total_share
+              人次
+            %p 揭晓时间：#{@item.prev_activity.end_time}
+
+        .m-detail-goods-result-luckyCode
+          .luckyNum{:target => "#{@item.prev_activity.id}"}
+            幸运号:
+            %span
+              =@item.prev_activity.lucky_no
+      .m-detail-goods
+        %p 
+          您参与了:
+          %span
+            = @item.prev_activity.time_of_user_buy @current_user
+          人次
+        %p 
+          夺宝号码为:
+          %span
+            =@item.prev_activity.lotteries.where(user_id:@current_user.id).collect(&:seq).join(',')
+  / <div class="stamp stamp01"><span>幸运号:<em>10004113</em></span></div>
+.ding.line.mb8
+  %ul
+    %a{:href => ''}
+      %li
+        %em
+          %img{:src => "/assets/images/record2.png"}/
+        %strong 晒单分享
+        %strong.text-color.pl10.bold (17)
+        %span.unfold
+          %img{:src => "/assets/images/unfold.png"}/
+    %a{:href => "javascript:void(0)",:onclick => "window.location.href += '/prev_activity'"} 
+      %li
+        %em
+          %img{:src => "/assets/images/winRecord2.png"}/
+        %strong 往期揭晓
+        %span.unfold
+          %img{:src => "/assets/images/unfold.png"}/
+    %a{:href => 'javascript:void(0)',:onclick => "window.location.href +='/participator'"}  
+      %li
+        %em
+          %img{:src => "/assets/images/userinfo.png"}/
+        %strong 本期参与
+        %time (#{@item.c_at.strftime("%Y-%m-%d %H:%M:%S")}开始)
+.award-detail
+  = render partial: "partials/participator",locals: {activity: @item,num:5}
+  
+
+- carts = LotteryCartItem.get_cart_by_user @current_user
+.shopa2
+  .goBuy{onClick:"javascript: goBuyLottery('#{@item.id}')"} 立即抢购
+  .goShop{onClick:"javascript: goLotteryCart('#{@item.id}')"} 加入购物车
+  .shopCart
+    %a{href:"/wap/lottery_cart"}
+      %img{:src => "/assets/images/ico_13.png"}
+
+      - unless carts.empty?
+        %span= carts.size
+
+
+:javascript
+    var swiper1 = new Swiper('.swiper1', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        loop: true,
+    });
+    var swiperb = new Swiper('.swiperb');      
+
+=javascript_include_tag 'cable'
+=javascript_include_tag "wap/#{controller_name}"
+

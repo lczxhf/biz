@@ -1,0 +1,9 @@
+class PropertyType
+  include  BaseModel
+  
+  field :name, type: String
+  field :option_values  
+
+  has_and_belongs_to_many :property_type_prototype
+  has_many :product_property_types
+end

@@ -1,0 +1,7 @@
+
+:plain
+  var html = "#{j render 'partials/admin/new_option_value_form', remote:true}";
+  bootbox.dialog({
+    title: "新增可选值",
+    message: html
+  });

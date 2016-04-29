@@ -1,0 +1,46 @@
+- form_name = obj.class.name.underscore
+- search_item = obj.send field
+- input_name = "form_name_#{field}"
+/ = f.input :product
+
+.form-group.string.optional
+  = f.label field, :class =>"control-label col-sm-3 no-padding-right"
+  .col-sm-5 
+    - unless search_item
+      %input.optional.col-xs-12{name:"", id:"#{input_name}", type:"text"}
+    -else
+      - show_name = search_item.name
+      / - show_name ||= search_item.title
+      / - show_name ||= search_item.content
+      / - show_name ||= search_item.brief
+      / - show_name ||= search_item.id
+      %input.col-xs-12.optional{name:"#{input_name}",id:"#{input_name}",value: show_name, type:"text"}
+  .col-sm-3
+    %span 输入名称/简介进行搜索    
+
+:javascript
+  $("##{input_name}").autocomplete({
+    serviceUrl: '/site/search',
+
+    onSelect: function (suggestion) {    
+      var form = $(".simple_form");
+      if (form == undefined) return;
+      _input = document.createElement("input");
+      _input.setAttribute("name", "#{form_name}[#{field}_id]");
+      _input.setAttribute("value", suggestion.data);
+      _input.setAttribute("class", "hide");
+      form.append(_input);
+    },
+
+    paramName: 'term',
+    params: {"class": "#{field}"},
+    dataType: "json",
+
+    transformResult: function(response) {      
+        return {          
+            suggestions: $.map(response, function(dataItem) {
+                return { value: dataItem.name, data: dataItem._id };
+            })
+        };
+    }
+  });
