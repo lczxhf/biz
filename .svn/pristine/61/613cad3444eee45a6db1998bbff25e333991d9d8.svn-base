@@ -1,6 +1,5 @@
 class LotteryOrderItem
   include  BaseModel
-  include Mongoid::Search    
 
   has_many :lotteries
 
@@ -14,8 +13,6 @@ class LotteryOrderItem
 
   field :pay_state, type:Integer, default:0 
   field_display :pay_state, {0=>"待付款", 1=>"已支付", 2 => "已退款" }  
-
-  search_in :prize_activity => :name, :lotteries => :seq, :lottery_order => :user
 
   def update_prize
     lotteries.each{|i| i.touch}
@@ -65,8 +62,7 @@ class LotteryOrderItem
   end
 
   def on_pay_done
-      self.lotteries.update_all(used:1, user_id:self.lottery_order.user_id)
-      self.update_attribute :pay_state, 1
+      self.lotteries.update_all(used:1, user_id:self.lottery_order.user_id, pay_state: 1)
       self.prize_activity.check_if_done
   end
 

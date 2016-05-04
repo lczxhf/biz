@@ -80,9 +80,9 @@ group :development, :test do
   gem 'byebug'
   gem 'faker'
   gem 'capybara'
-  gem 'guard-rspec'
   gem 'launchy' 
   gem 'database_cleaner'
+  gem "selenium-webdriver"
 end
 
 

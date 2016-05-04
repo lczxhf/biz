@@ -74,9 +74,4 @@ Rails.application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
   Mongoid.logger.level = Logger::ERROR
-
-  # Rails.application.config.action_cable.allowed_request_origins = ['http://m.lmoar.com', /http:\/\/ruby.*/]
-  ActionCable.server.config.disable_request_forgery_protection = true
-  # Rails.application.config.action_cable.url = "ws://m.lmoar.com.com:28080"
-  config.action_cable.url = 'ws://m.lmoar.com/cable'
 end

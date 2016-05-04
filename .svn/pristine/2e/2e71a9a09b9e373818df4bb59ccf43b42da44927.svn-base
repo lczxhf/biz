@@ -263,7 +263,6 @@ zh-CN:
     saled_share: 卖出份数
     lottery_order_item: 一元拍记录
     prize_time: 期数
-    is_winner: 中奖
 
 
   models:

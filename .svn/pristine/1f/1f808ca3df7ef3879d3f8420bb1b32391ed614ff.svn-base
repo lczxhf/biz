@@ -82,7 +82,7 @@ class Wap::LotteryOrderController < Wap::ForceLoginController
     params.delete('controller')
     params.delete('action')
     params.delete('sign_type')
-    params.delete('lottery_order')
+    params.delete('pay')
 
     sign = params.delete('sign')
     string = params.sort.map { |k, v| "#{k}=#{v}" }.join('&')

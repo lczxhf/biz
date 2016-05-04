@@ -1,0 +1,13 @@
+node(:draw){@draw}
+node(:recordsTotal){ LotteryOrderItem.where(pay_state:1).count }
+node(:recordsFiltered){ @items.count }
+
+child @items, :root => "data", :object_root => false  do  
+  attributes '_id','num'
+  node(:prize_activity) {|item| item.prize_activity.name}  
+  node(:prize_time) {|item| item.prize_activity.begin_time.strftime("%h%m%d")}  
+  node(:u_at) {|item| item.u_at.to_hms}  
+end
+
+node(:data ){[]} if @items.count == 0
+
