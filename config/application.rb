@@ -34,7 +34,7 @@ module Biz
 
     config.time_zone = 'Chongqing'
     config.active_job.queue_adapter = :delayed_job
-    config.middleware.use 'Rack::RawUpload'
+    config.middleware.use Rack::RawUpload
 
     # config.mongoid.observers = :model_observer
 

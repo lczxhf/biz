@@ -75,7 +75,7 @@ gem 'alipay', '~> 0.11.0'
 
 group :development, :test do
   gem 'rspec-rails', '3.5.0.beta1'
-  gem 'factory_girl_rails', '~> 4.5.0'  
+  gem 'factory_girl_rails', '~> 4.5.0'
 
   gem 'byebug'
   gem 'faker'

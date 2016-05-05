@@ -1,14 +1,8 @@
 require 'rails_helper'
-require 'factory_girl'
-require  'prize'
 
-describe Prize, '#total_share' do 
-
-  it 'total_share' do
-    prize = Prize.new name:"one", price:1000, sale_unit:100
-    p prize.total_share
-
-    expect(prize.total_share).to eq 10
-  end
-  
+describe Prize, type: :model do 
+  let(:prize) { build(:prize,price:100,sale_unit:20)}
+  it "#total_share" do 
+  	  expect(prize.total_share).to eq 5
+  end 
 end
