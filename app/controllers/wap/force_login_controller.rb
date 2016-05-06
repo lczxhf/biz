@@ -4,7 +4,7 @@ class Wap::ForceLoginController < Wap::ApplicationController
 
   def force_login
     flash[:notice] = '请先登录'
-    if @current_user.is_tmp? && request.headers['accept'].include?('json')
+    if @current_user.is_tmp? && request.headers['accept'].try(:include?,'json')
     	render json: {result_code:3,result_msg:'请先登录'}
     elsif @current_user.is_tmp?
     	redirect_to new_wap_session_path 

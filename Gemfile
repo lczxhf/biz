@@ -83,6 +83,7 @@ group :development, :test do
   gem 'launchy' 
   gem 'database_cleaner'
   gem "selenium-webdriver"
+  gem 'rails-controller-testing'
 end
 
 

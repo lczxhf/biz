@@ -15,7 +15,6 @@ class LotteryOrder
   field_display :pay_state, {0=>"待付款", 1=>"已支付", 2 => "已退款" }  
 
   scope :pay_record , -> {where(pay_state:1)}
-
   field :pay_time, type:Time
   field :user_ip, type:String
 

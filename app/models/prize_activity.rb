@@ -57,12 +57,12 @@ class PrizeActivity
       self.lotteries.where(seq:lucky_no).first.user
   end
 
-  def get_all_order(num=true)
+  def get_all_order(page=1,num=true)
       items_ids = self.lotteries.where(used:1).distinct(:lottery_order_item_id)
       if num == true
         LotteryOrderItem.includes(lottery_order: :user).in(id:items_ids).order(c_at: :desc)
       else
-        LotteryOrderItem.includes(lottery_order: :user).in(id:items_ids).order(c_at: :desc).page(1).per(num)
+        LotteryOrderItem.includes(lottery_order: :user).in(id:items_ids).order(c_at: :desc).page(page).per(num)
       end
   end
   def get_lucky_order

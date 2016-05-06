@@ -8,7 +8,7 @@ module ApplicationCable
 
     protected
       def find_verified_user_id
-        cookies.signed[:user_id] || nil
+        cookies.signed[:user_id] || nil #reject_unauthorized_connection
       end
   end
 end

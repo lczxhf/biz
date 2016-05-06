@@ -14,10 +14,11 @@ FactoryGirl.define do
 		factory :already_end_activity do
 				after(:create) do |activity|
 					activity.total_share.times.each do |index|
-						order = create(:lottery_order,pay_state:1,real_amount:activity.prize.sale_unit)
-						item = create(:lottery_order_item,num:activity.prize.sale_unit,pay_state:1,prize:activity.prize,prize_activity:activity,lottery_order:order)
+						order = create(:pay_order,real_amount:activity.prize.sale_unit)
+						item = create(:pay_order_item,num:activity.prize.sale_unit,prize:activity.prize,prize_activity:activity,lottery_order:order)
 						activity.lotteries << lottery = create(:already_saled_lottery,prize_activity:activity,lottery_order_item:item,seq:10000001+index,user:order.user)
 					end
+					activity.check_if_done
 				end
 		end
 	end

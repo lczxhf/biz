@@ -7,7 +7,7 @@ class Wap::LotteryOrderController < Wap::ForceLoginController
   def index
     flash.now[:referer] = '/wap/user'
     @title = "夺宝记录"
-    @items = LotteryOrder.pay_record.map {|a| a.lottery_order_items}.flatten
+    @items = LotteryOrder.pay_record.where(user:@current_user).map {|a| a.lottery_order_items}.flatten
     @activities = @items.map{|a| a.prize_activity }.uniq
     flash.now[:t] = params[:t]
   end

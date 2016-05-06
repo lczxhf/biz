@@ -32,10 +32,6 @@ describe PrizeActivity, type: :model do
   			expect(prize_activity.remain_share).to eq 7
   		end
 
-  		it '#check_if_done' do
-
-  		end
-
   		describe '#prev_activity' do
   			it 'is first time' do
   				expect(prize_activity.prev_activity).to eq nil
@@ -55,9 +51,6 @@ describe PrizeActivity, type: :model do
 
   	describe 'after end the prize_activity' do
   		let(:prize_activity) {create(:already_end_activity)}
-  		before :each do 
-  				prize_activity.check_if_done
-  		end
   		describe 'check_if_done' do
   			
   			it 'have lucky_no' do
@@ -82,6 +75,18 @@ describe PrizeActivity, type: :model do
   			it 'not pass user' do
   				prize_activity
   				expect(prize_activity.time_of_user_buy).to eq 1
+  			end
+  		end
+
+  		context '#get_all_order' do
+  			it 'pass num' do
+  				expect(prize_activity.get_all_order(1,5).to_a.size).to eq 5
+  			end
+
+  			it 'not pass num' do
+  				prize_activity
+  				arr = User.all.map{|a| a.lottery_orders.map{|b| b.id}}.flatten
+  				expect(prize_activity.get_all_order.map {|a| a.lottery_order.id}).to match_array arr
   			end
   		end
   	end

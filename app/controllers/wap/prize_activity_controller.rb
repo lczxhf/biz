@@ -31,4 +31,9 @@ class Wap::PrizeActivityController < Wap::ApplicationController
   		@title = "中奖纪录"
   		@activities = @current_user.lotteries.includes(:prize_activity).where(is_winner:true).map(&:prize_activity)
   end
+
+  def award_share
+      @title = "奖品晒单"
+      prize_id = PrizeActivity.find(params[:id]).prize.id
+  end
 end

@@ -115,6 +115,7 @@ Rails.application.routes.draw do
         get "prev_activity", on: :member
         get "participator", on: :member
         get "mywin_record", on: :collection
+        get "award_share", on: :member
     end
     resources :lottery_cart
     resources :lottery_order do
