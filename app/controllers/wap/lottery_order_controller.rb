@@ -29,7 +29,6 @@ class Wap::LotteryOrderController < Wap::ForceLoginController
   end
 
   def create
-    
     items =  JSON.parse params[:lottery_order]
     if items.present?
       lottery_order = @current_user.lottery_orders.new

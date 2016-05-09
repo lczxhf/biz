@@ -988,6 +988,7 @@ border-radius:3px;}
 .luckyNum span{vertical-align: middle;padding-left: 10px;}
 .w-record-detail p{font-size: 16px;color:#999999;height: 25px;line-height: 25px;}    
 .w-record-detail em{color: #db3652;font-style: normal;}
+.w-record-detail button{width: 20%;color: #FFFFFF;background: #db3652;line-height: 20px;border-radius: 5px;font-size: 14px;margin-right: 20px;float: right}
 .txt-green { color: #528d00;}
 .txt-blue { color: #519fff;}
 .txt-red{color: #db3652;}
@@ -1217,7 +1218,43 @@ border-radius:3px;}
 .balance ul li{width: 96%;border-bottom:1px solid #e1e1e1;padding: 0 2%;color: #333;line-height: 35px;text-indent: 20px;background: url(/assets/images/ico_25.png) no-repeat left center;background-size: 16px 16px;background-position: 2%;}
 .balance ul li.selected{background: url(/assets/images/ico_25a.png) no-repeat left center;background-size: 17px 17px;background-position: 2%;}
 .confirmPay{position: fixed;bottom: 0;width: 92%;margin:4%;text-align: center;line-height: 37px;color: #fff;background: #db3652;border-radius: 5px;font-size: 16px;overflow:hidden;overflow-x:hidden;overflow-y:hidden;}
+.icon-suc-w { width: 25px; height: 25px;}
+.icon-w {display: inline-block;  vertical-align: middle; background: url(/assets/images/ico_25a.png) no-repeat left center;background-size: 100% auto;margin-right: 6px;}
+.wait-pay-result h2{padding: 8% 0;}
 
+
+/*评价*/
+.evaluate{margin: 0 2%;border: 1px solid #e6e6e6;background: rgb(248,248,248);}
+.evaluate .evaluate-t{margin: 10px 10px 16px;}
+.evaluate-t textarea{width: 96%;resize: none;border-radius:5px;line-height: 20px;padding: 8px 2%;color: #545353;font-size: 14px;height: 76px;border: 1px solid #eee;}
+.evaluate-t p{font-size: 16px;color: #545353;line-height: 40px;}
+.evaluate-t p span{color: #999999;padding-left: 6px;font-size: 12px;}
+.evaluate-t ul{display: inline-block;width: 100%;margin-bottom:16px;}
+.evaluate-t ul li{width: 60px;height: 60px;line-height:60px;float: left;margin-right: 6px;}
+.evaluate-t ul li.add{border: 1px dashed #E6E6E6;background: url(/assets/images/add.png)no-repeat center center;}
+.evaluate-t ul li.add img{vertical-align: initial;}
+.evaluate-t ul li img{width: 60px;height: 60px;}
+.evaluate-t ul li .addPhoto{width: 60px;height: 60px;opacity: 0;}
+.eval-share{position: relative;border-top: 1px solid #e6e6e6; padding-top: 8px;}
+.eval-share p{line-height: 30px;font-size: 14px;background: url(/assets/images/ico_25.png) no-repeat left center;background-size: 14px 14px;padding-left: 20px;}
+.eval-share p.selected { background: url(/assets/images/ico_25a.png) no-repeat left center;  background-size: 15px 15px;}
+.eval-share a{position: absolute;right: 0;bottom: 0;line-height: 30px;font-size:14px;background: url(/assets/images/detail2.png)no-repeat left center;background-size: 14px 14px;padding-left: 18px;color: #db3652;}
+.publish{margin: 16px 16px 0; text-align: center; line-height: 37px;color: #fff; background: #db3652; border-radius: 5px;font-size: 16px;  overflow: hidden;}
+.eval-bd{border-bottom: 1px solid #E6E6E6;padding-bottom: 10px;background: #fff;}
+.product-detail{display: inline-block;margin-top: 10px;border: 1px solid #E6E6E6;border-right:0;border-left:0;background: #fff;padding: 2%;font-size: 14px;}
+.product-detail .photo{width: 18%;float: left;margin-right: 2%;}
+.product-detail .title{width: 80%;float: left;position: relative;}
+.product-detail .title .title-l{width: 90%;display: block;}
+.product-detail .title .title-l h2{font-size: 14px;color: #545353;line-height: 20px;height: 44px;}
+.product-detail .title .title-l span{color: #db3652;}
+.product-detail .title em{width:20px;height:15px;background: url(/assets/images/unfold.png)no-repeat left center;background-size:100%;position: absolute;bottom:18px;right: 8px;}
+.writeEval{text-align: center;background: #db3652; border-radius: 5px;color: #fff;width: 25%;float: right;line-height: 35px;margin-top: 15px;}
+.logistics{display: inline-block;padding: 10px 2% 20px;width: 96%;background: #fff;margin-top: 8px;border: 1px solid #E6E6E6;border-right: 0;border-left: 0;}
+.logistics .messaged{float: left;width: 75%;}
+.logistics .messaged h2{color: #545353;font-size: 16px;line-height: 25px;}
+.logistics .messaged p{color: #999999;line-height: 20px;}
+.logistics .messaged p span{color: #db3652;}
+.logistics .btn{width: 25%;float: left;text-align: center;color: #FFFFFF;background: #db3652;line-height: 35px;border-radius: 5px;font-size: 14px;margin-top: 12px;}
 /*pc页面*/
 @media only screen and (min-width: 1000px) {
 			body {width: 480px;margin: 0 auto;}

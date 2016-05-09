@@ -11,10 +11,39 @@ window.goBuyLottery = (id) ->
         (resp)->
           # console.log resp
           location.href = '/wap/lottery_cart'
+window.goEvaluate = (id) ->
+  location.href = '/wap/prize_activity/'+id+'/evaluate_page'
 $ ->
+  arr = new Array
   $(".luckyNum").click () ->
     window.location.href = "/wap/prize_activity/"+$(this).attr("target")+"/count_result"
+  $(".addPhoto").change (e) ->
+    ul = $('.addPhoto').parents('ul')
+    if ul.children().size() < 4
+      file = e.target.files[0]
+      arr.push file
+      reader = new FileReader
+      reader.onload=() ->
+        ul.append '<li><img class="upload_img" src="'+reader.result+'"></li>'
+      reader.readAsDataURL file
+    else
+      alert '最多只能添加三张图片'
 
+  $('.publish').click () ->
+    is_publish = if $(".eval-share .selected").html() == '匿名发表' then false else true
+    content = $("#content").val()
+    form = new FormData
+    for a in arr
+      form.append('file[]',a)
+    form.append('content',content)
+    form.append('is_publish',is_publish)
+    xhr = new XMLHttpRequest()
+    
+    xhr.open("post",'evaluate', true)
+    xhr.setRequestHeader('X-CSRF-Token',$('meta[name="csrf-token"]').attr('content'))
+    xhr.onload = () ->
+
+    xhr.send(form);
 
 App.prize_notify = App.cable.subscriptions.create "PrizeChannel",
   connected: (data) ->

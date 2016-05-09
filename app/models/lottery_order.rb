@@ -49,6 +49,8 @@ class LotteryOrder
               rollback_lottery
               return false
           end
+        else
+           return false
         end
       end
 

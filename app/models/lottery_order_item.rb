@@ -36,7 +36,7 @@ class LotteryOrderItem
     lottery_count = 0 
       while lottery_count < part
         return false if prize_activity.lotteries.where(used:0).count <= 0
-        if prize_activity.lotteries.where(:random.gt => rand, used:0).update(used:2, lottery_order_item:self.id).first['nModified'] == 1 #update first match 
+        if prize_activity.lotteries.where(:random.gt => rand, used:0).update(used:2, lottery_order_item:self.id).first['n'] == 1 #update first match 
           lottery_count += 1
         end       
 

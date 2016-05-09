@@ -116,6 +116,8 @@ Rails.application.routes.draw do
         get "participator", on: :member
         get "mywin_record", on: :collection
         get "award_share", on: :member
+        get 'evaluate_page', on: :member
+        post 'evaluate',on: :member
     end
     resources :lottery_cart
     resources :lottery_order do

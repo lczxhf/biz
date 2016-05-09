@@ -21,5 +21,24 @@ FactoryGirl.define do
 					activity.check_if_done
 				end
 		end
+
+		factory :prize_without_order do
+			after(:create) do |activity|
+					activity.total_share.times.each do |index|
+						activity.lotteries << lottery = create(:lottery,prize_activity:activity,seq:10000001+index)
+					end
+			end
+		end
+
+
+		factory :order_without_pay do
+			after(:create) do |activity|
+					activity.total_share.times.each do |index|
+						order = create(:pay_order)
+						item = create(:pay_order_item,num:activity.prize.sale_unit,prize:activity.prize,prize_activity:activity,lottery_order:order)
+						activity.lotteries << lottery = create(:lottery,prize_activity:activity,seq:10000001+index)
+					end
+			end
+		end
 	end
 end

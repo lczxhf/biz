@@ -1,0 +1,60 @@
+<%=javascript_include_tag "wap/#{controller_name}"%>
+<div class="pd0">
+			<div class="eval-bd">
+				<div class="evaluate">
+					<div class="evaluate-t">
+						<textarea id="content" maxlength="100" placeholder="这次买的商品满意吗？写点心得给其他顾客参考吧。长度在5-100字之间"></textarea>
+						<p>添加图片<span>(您最多可上传3张图片)</span></p>
+						<ul>
+							<li class="add"><input type="file" class="addPhoto" multiple='multiple'></li>
+							<!-- <li><img src="/assets/images/1452840490108812_0.jpeg"></li>
+							<li><img src="/assets/images/1452840490108812_0.jpeg"></li>
+							<li><img src="/assets/images/1452840490108812_0.jpeg"></li> -->
+						</ul>
+						<div class="eval-share">
+							<p class='selected'>匿名发表</p>
+							<p>同步购物圈,与好友分享</p>
+							<a>同步说明</a>
+						</div>
+						<div class="publish">发表评价送京豆</div>
+					</div>
+				</div>
+			</div>
+			<div class="product-detail">
+				<a class="photo"><img src="../assets/image/1451891467878922_0.jpeg" ></a>
+				<div class="title">
+					<a class="title-l">
+						<h2>南宁南奥奥迪 S7 南宁全系车型 1千元定金</h2>
+						<span>￥33</span>
+					</a>
+					<em></em>
+				</div>
+			</div>
+			<div class="product-detail">
+				<a class="photo"><img src="/assets/images/bg_1.png" ></a>
+				<div class="title">
+					<a class="title-l">
+						<h2>南宁南奥奥迪 S7 南宁全系车型 1千元定金</h2>
+						<span>￥33</span>
+					</a>
+					<em></em>
+				</div>
+			</div>
+			<div class="logistics">
+				<div class="messaged">
+					<h2>物流信息评价:</h2>
+					<p>评价大于200元的订单可以获得<span>10</span>个京豆</p>
+					<p>(订单完成3个月内有效)</p>
+				</div>
+				<div class="btn">发表</div>
+			</div>
+		</div>
+
+		<script>
+			$(document).ready(function() {
+				var $tab_li = $('.eval-share>p');
+				$tab_li.click(function() {
+					$(this).addClass('selected').siblings().removeClass('selected');
+				});
+			});
+		</script>

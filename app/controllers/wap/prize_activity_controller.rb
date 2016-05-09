@@ -36,4 +36,21 @@ class Wap::PrizeActivityController < Wap::ApplicationController
       @title = "奖品晒单"
       prize_id = PrizeActivity.find(params[:id]).prize.id
   end
+
+  def evaluate_page
+      @title = '评价'
+      prize_activity = PrizeActivity.find(params[:id])
+      redirect_to :back unless @current_user == prize_activity.get_lucky_user
+  end
+
+  def evaluate
+      prize_activity = PrizeActivity.find(params[:id])
+      if @current_user == prize_activity.get_lucky_user
+          redner plian: 'ok'
+      else
+        redirect_to :back 
+      end
+      
+  end
+
 end
