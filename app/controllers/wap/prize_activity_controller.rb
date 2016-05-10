@@ -46,7 +46,7 @@ class Wap::PrizeActivityController < Wap::ApplicationController
   def evaluate
       prize_activity = PrizeActivity.find(params[:id])
       if @current_user == prize_activity.get_lucky_user
-          redner plian: 'ok'
+          render plian: 'ok'
       else
         redirect_to :back 
       end
