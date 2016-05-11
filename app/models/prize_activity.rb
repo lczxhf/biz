@@ -11,6 +11,7 @@ class PrizeActivity
   has_many :lotteries
   has_many :lottery_cart_items, autosave: true
   has_many :lottery_order_items
+  has_one :prize_comment  #评价晒单
   belongs_to :prize
 
   after_create :init_lotteries

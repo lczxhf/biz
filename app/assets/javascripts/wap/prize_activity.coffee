@@ -42,7 +42,12 @@ $ ->
     xhr.open("post",'evaluate', true)
     xhr.setRequestHeader('X-CSRF-Token',$('meta[name="csrf-token"]').attr('content'))
     xhr.onload = () ->
-
+        result = JSON.parse xhr.responseText
+        switch result['resultCode']
+          when 1 then window.location.href = "/wap/prize_activity/"+result['resultMsg']+"/award_share"
+          when 0 then alert '创建失败'
+          when 2 then alert '您不是获奖者!不能评论'
+          when 3 then alert '您已评论'
     xhr.send(form);
 
 App.prize_notify = App.cable.subscriptions.create "PrizeChannel",

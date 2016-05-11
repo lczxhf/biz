@@ -14,6 +14,7 @@ class Prize
   has_many :pictures
   has_many :lottery_order_items
   has_one :prize_activity
+  has_many :prize_comments
 
   def total_share
     price / sale_unit

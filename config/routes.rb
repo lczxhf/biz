@@ -1,8 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'hello_world', to: 'hello_world#index'
-
-
   mount Ckeditor::Engine => '/ckeditor'   
   mount ActionCable.server => '/cable'
   
@@ -124,6 +121,16 @@ Rails.application.routes.draw do
         get 'pay', on: :member
         get "web_pay", on: :member
         post "notify", on: :collection
+    end
+
+    resources :prize_comment
+
+  end
+
+  namespace :weixin do
+    resources :auth do 
+      get 'auth', on: :collection
+      get 'got_code', on: :collection
     end
   end
 

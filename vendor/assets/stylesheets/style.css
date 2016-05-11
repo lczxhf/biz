@@ -503,9 +503,9 @@ h1,h2,h3,h4,strong{font-weight:normal;}
 
 .picList{margin-top:12px;background:#fff;border-top:1px solid #eee;border-bottom:1px solid #eee;}
 .picList li{clear:both; overflow:hidden;border-bottom:1px solid #ddd;padding:15px;}
-.picList em{ display:block;float:left;width:60px;height:60px;overflow:hidden;}
+.picList em{float:left;width:60px;height:60px;overflow:hidden;}
 .picList p{margin-left:70px;}
-.picList p a{ display:block;color:#333;font-size:12px;line-height:18px;padding-bottom:2px;}
+.picList p a{ display:line-block;color:#333;font-size:12px;line-height:18px;padding-bottom:2px;}
 .picList p b{font-size:16px;font-weight:normal;}
 .picList p b.org{line-height:28px;height:28px;white-space:nowrap;overflow:hidden;}
 

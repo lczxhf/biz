@@ -1,44 +1,26 @@
 <%=javascript_include_tag "wap/#{controller_name}"%>
 <%=javascript_include_tag 'cable'%>
-<ul>
+			<ul>
+			<%@comments.each do |comment|%>
 				<li class="award-share">
 					<div class="fl avatar-wl">
 						<div class=" avatar"><img src="../assets/image/1452843160659648_0.jpeg" /></div>
 					</div>
 					<a href="" class="fr avatar-wr">
 						<div class="people">
-							<span class="text-color">一张就够</span>
-							<span class="underway-r">2016-04-31</span>
+							<span class="text-color"><%=comment.user.name%></span>
+							<span class="underway-r"><%=comment.c_at.to_hms%></span>
 						</div>
 						<div class="detail-share">
 							<h2>奖品晒单奖品晒单</h2>
-							<p class="ellipsis">南宁南奥奥迪 S7 全系车型 1千元定金</p>
-							<p>商品期数: 62820024</p>
-							<p class="ellipsis2">评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论</p>
-							<span><img src="../assets/image/1451891467878922_0.jpeg"/></span>
-							<span><img src="../assets/image/1451891467878922_0.jpeg"/></span>
-							<span><img src="../assets/image/1451891467878922_0.jpeg"/></span>
+							<p class="ellipsis"><%=comment.prize_activity.name%></p>
+							<p>商品期数: <%=comment.prize_activity.begin_time.strftime("%Y%m%d%H%M")%></p>
+							<p class="ellipsis2"><%=comment.content%></p>
+							<%comment.pictures.each do |picture|%>
+							<span><img src="<%=picture.url%>"/></span>
+							<%end%>
 						</div>
 					</a>
 				</li>
-				<li class="award-share">
-					<div class="fl avatar-wl">
-						<div class=" avatar"><img src="../assets/image/1452843160659648_0.jpeg" /></div>
-					</div>
-					<a href="" class="fr avatar-wr">
-						<div class="people">
-							<span class="text-color">一张就够</span>
-							<span class="underway-r">2016-04-31</span>
-						</div>
-						<div class="detail-share">
-							<h2>奖品晒单奖品晒单</h2>
-							<p class="ellipsis">南宁南奥奥迪 S7 全系车型 1千元定金</p>
-							<p>商品期数: 62820024</p>
-							<p class="ellipsis2">评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论</p>
-							<span><img src="../assets/image/1451891467878922_0.jpeg"/></span>
-							<span><img src="../assets/image/1451891467878922_0.jpeg"/></span>
-							<span><img src="../assets/image/1451891467878922_0.jpeg"/></span>
-						</div>
-					</a>
-				</li>
+			<%end%>
 			</ul>

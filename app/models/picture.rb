@@ -13,6 +13,7 @@ class Picture
   belongs_to :index_banner
   belongs_to :article
   belongs_to :prize
+  belongs_to :prize_comment
   
   # belongs_to :message  #
   

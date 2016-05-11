@@ -35,6 +35,7 @@ class Wap::PrizeActivityController < Wap::ApplicationController
   def award_share
       @title = "奖品晒单"
       prize_id = PrizeActivity.find(params[:id]).prize.id
+      @comments = PrizeComment.includes(:user,:pictures,:prize_activity).where(prize_id:prize_id)
   end
 
   def evaluate_page
@@ -46,9 +47,20 @@ class Wap::PrizeActivityController < Wap::ApplicationController
   def evaluate
       prize_activity = PrizeActivity.find(params[:id])
       if @current_user == prize_activity.get_lucky_user
-          render plian: 'ok'
+          if prize_activity.prize_comment.blank?
+            if comment = @current_user.prize_comments.create(prize_activity:prize_activity,content:params[:content],prize:prize_activity.prize_id)
+                  params[:file].each do |file|
+                    comment.pictures.create(picture:file)
+                  end
+                  render plain: %{{"resultCode":1,"resultMsg":#{params[:id]}}}
+            else
+                render plain: %{{"resultCode":0}}
+            end
+          else
+              render plain: %{{"resultCode":3}}
+          end
       else
-        redirect_to :back 
+        render plain: %{{"resultCode":2}}
       end
       
   end

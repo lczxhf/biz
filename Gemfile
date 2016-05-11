@@ -57,15 +57,16 @@ gem 'rabl'
 gem 'rest-client'
 gem 'puma'
 gem 'redis'
-# gem 'faye-rails'
+
+gem 'wx_pay'
+gem 'weixin_authorize'
+gem "redis-namespace"
+
 # gem 'thin'
 # gem 'rack-timeout'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-
-# Use Unicorn as the app server
-# gem 'unicorn'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

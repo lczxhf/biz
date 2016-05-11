@@ -1,0 +1,9 @@
+class PrizeComment
+  include  BaseModel
+
+  field :content, type:String
+  belongs_to :prize_activity
+  belongs_to :user
+
+  has_many :pictures
+end
