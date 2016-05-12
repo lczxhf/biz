@@ -4,7 +4,7 @@
 			<%@comments.each do |comment|%>
 				<li class="award-share">
 					<div class="fl avatar-wl">
-						<div class=" avatar"><img src="../assets/image/1452843160659648_0.jpeg" /></div>
+						<div class=" avatar"><img src="<%=comment.user.avatar.thumb.url%>" /></div>
 					</div>
 					<a href="" class="fr avatar-wr">
 						<div class="people">
@@ -12,12 +12,12 @@
 							<span class="underway-r"><%=comment.c_at.to_hms%></span>
 						</div>
 						<div class="detail-share">
-							<h2>奖品晒单奖品晒单</h2>
+							<h2>奖品晒单</h2>
 							<p class="ellipsis"><%=comment.prize_activity.name%></p>
 							<p>商品期数: <%=comment.prize_activity.begin_time.strftime("%Y%m%d%H%M")%></p>
 							<p class="ellipsis2"><%=comment.content%></p>
 							<%comment.pictures.each do |picture|%>
-							<span><img src="<%=picture.url%>"/></span>
+								<span><img src="<%=picture.url%>"/></span>
 							<%end%>
 						</div>
 					</a>

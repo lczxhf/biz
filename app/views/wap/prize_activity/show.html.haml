@@ -74,7 +74,7 @@
         %em
           %img{:src => "/assets/images/record2.png"}/
         %strong 晒单分享
-        %strong.text-color.pl10.bold (17)
+        %strong.text-color.pl10.bold (#{@item.prize.prize_comments.count})
         %span.unfold
           %img{:src => "/assets/images/unfold.png"}/
     %a{:href => "javascript:void(0)",:onclick => "window.location.href += '/prev_activity'"} 
